@@ -6,7 +6,6 @@ import 'package:read_cache_ui/src/core/network/read_cache_client.dart';
 import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -39,8 +38,5 @@ Future<void> init() async {
     ),
   );
 
-  //External
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
   getIt.registerLazySingleton<Dio>(() => Dio());
 }

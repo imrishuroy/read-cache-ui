@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:read_cache_ui/firebase_options.dart';
 import 'package:read_cache_ui/src/core/config/injection_container.dart';
+import 'package:read_cache_ui/src/core/config/shared_prefs.dart';
 import 'package:read_cache_ui/src/core/network/auth_interceptor.dart';
 import 'package:read_cache_ui/src/core/routes/app_router.dart';
 
@@ -13,6 +14,7 @@ Future<void> main() async {
   );
   await init();
   getIt<Dio>().interceptors.add(AuthInterceptor());
+  await SharedPrefs.init();
   runApp(const ReadCache());
 }
 

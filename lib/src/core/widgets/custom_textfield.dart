@@ -5,13 +5,16 @@ class CustomTextField extends StatelessWidget {
     required this.textEditingController,
     required this.hintText,
     required this.validator,
-    super.key,
+    this.readOnly = false,
     this.onChanged,
+    super.key,
   });
+
   final TextEditingController textEditingController;
   final String hintText;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,7 @@ class CustomTextField extends StatelessWidget {
       ),
       onChanged: onChanged,
       validator: validator,
+      readOnly: readOnly,
     );
   }
 }

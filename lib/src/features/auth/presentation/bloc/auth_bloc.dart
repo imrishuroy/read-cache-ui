@@ -5,10 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
-import 'package:read_cache_ui/src/core/config/injection_container.dart';
+import 'package:read_cache_ui/src/core/config/shared_prefs.dart';
 import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -18,35 +17,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required AuthUseCase authUseCase,
   })  : _authUseCase = authUseCase,
         super(AuthState.initial()) {
-    _userSubscription = FirebaseAuth.instance.authStateChanges().listen(
-          (user) => add(AuthUserChanged(user: user)),
-        );
-    on<AuthUserChanged>(_onAuthUserChanged);
     on<AuthLoggedIn>(_onAuthLoggedIn);
-    on<AuthSigned>(_onAuthSigned);
+    on<AuthSignedUp>(_onAuthSignedUp);
+    on<AuthUserCreated>(_onAuthUserCreated);
+    on<AuthLogoutRequested>(_onAuthLogoutRequested);
   }
   final AuthUseCase _authUseCase;
-  late StreamSubscription<User?> _userSubscription;
-
-  Future<void> _onAuthUserChanged(
-    AuthUserChanged event,
-    Emitter<AuthState> emit,
-  ) async {
-    if (event.user != null) {
-      emit(
-        state.copyWith(
-          user: event.user,
-          status: AuthStatus.authenticated,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          status: AuthStatus.unauthenticated,
-        ),
-      );
-    }
-  }
 
   Future<void> _onAuthLoggedIn(
     AuthLoggedIn event,
@@ -54,7 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(
       state.copyWith(
-        status: AuthStatus.loading,
+        authStatus: AuthStatus.loading,
       ),
     );
 
@@ -67,62 +43,64 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (failure) {
         emit(
           state.copyWith(
-            status: AuthStatus.failure,
+            authStatus: AuthStatus.failure,
+            failure: failure,
           ),
         );
       },
       (userCredential) {
         emit(
           state.copyWith(
-            user: userCredential?.user,
-            //  status: AuthStatus.authenticated,
+            // authStatus: AuthStatus.loggedIn,
+            firebaseUser: userCredential?.user,
           ),
         );
       },
     );
+    if (state.firebaseUser != null) {
+      final idToken = await state.firebaseUser?.getIdToken();
+      //  debugPrint('token $idToken');
 
-    final idToken = await state.user?.getIdToken();
-    debugPrint('token $idToken');
+      if (idToken != null) {
+        await SharedPrefs.setToken(token: idToken);
+      }
 
-    final sharedPrefs = getIt<SharedPreferences>();
+      final userRes = await _authUseCase.getUser(
+        id: state.firebaseUser?.uid,
+      );
 
-    if (idToken != null) {
-      await sharedPrefs.setString('token', idToken);
+      // debugPrint('user res $userRes');
+
+      userRes.fold(
+        (failure) {
+          emit(
+            state.copyWith(
+              // authStatus: AuthStatus.failure,
+              authStatus: AuthStatus.loggedIn,
+              failure: failure,
+            ),
+          );
+        },
+        (user) {
+          emit(
+            state.copyWith(
+              user: user,
+              authStatus: AuthStatus.loggedIn,
+              userStatus: UserStatus.authorized,
+            ),
+          );
+        },
+      );
     }
-
-    final userRes = await _authUseCase.getUser(
-      id: state.user?.uid,
-    );
-
-    debugPrint('user res $userRes');
-
-    userRes.fold(
-      (failure) {
-        emit(
-          state.copyWith(
-            status: AuthStatus.failure,
-            failure: failure,
-          ),
-        );
-      },
-      (user) {
-        debugPrint('Db user $user');
-        emit(
-          state.copyWith(
-            status: AuthStatus.authenticated,
-          ),
-        );
-      },
-    );
   }
 
-  Future<void> _onAuthSigned(
-    AuthSigned event,
+  Future<void> _onAuthSignedUp(
+    AuthSignedUp event,
     Emitter<AuthState> emit,
   ) async {
     emit(
       state.copyWith(
-        status: AuthStatus.loading,
+        authStatus: AuthStatus.loading,
       ),
     );
 
@@ -134,55 +112,73 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (failure) {
         emit(
           state.copyWith(
-            status: AuthStatus.failure,
+            failure: failure,
+            authStatus: AuthStatus.failure,
           ),
         );
       },
       (userCredential) {
         emit(
           state.copyWith(
-            user: userCredential?.user,
-            status: AuthStatus.authenticated,
+            firebaseUser: userCredential?.user,
+            authStatus: AuthStatus.signedUp,
           ),
         );
       },
     );
 
-    final idToken = await state.user?.getIdToken();
+    final idToken = await state.firebaseUser?.getIdToken();
     debugPrint('token $idToken');
 
-    final sharedPrefs = getIt<SharedPreferences>();
-
     if (idToken != null) {
-      await sharedPrefs.setString('token', idToken);
+      await SharedPrefs.setToken(token: idToken);
     }
+  }
 
-    final userRes = await _authUseCase.createUser(
-      signUpReqDto: SignUpReqDto(
+  Future<void> _onAuthUserCreated(
+    AuthUserCreated event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        authStatus: AuthStatus.loading,
+      ),
+    );
+    final response = await _authUseCase.createUser(
+      createUserReqDto: CreateUserReqDto(
         email: event.email,
-        password: event.password,
         name: event.name,
       ),
     );
 
-    userRes.fold(
+    response.fold(
       (failure) {
         emit(
           state.copyWith(
             failure: failure,
-            status: AuthStatus.unauthenticated,
+            authStatus: AuthStatus.failure,
           ),
         );
       },
       (user) {
-        debugPrint('created user $user');
+        emit(
+          state.copyWith(
+            userStatus: UserStatus.authorized,
+            user: user,
+          ),
+        );
       },
     );
   }
 
-  @override
-  Future<void> close() {
-    _userSubscription.cancel();
-    return super.close();
+  Future<void> _onAuthLogoutRequested(
+    AuthLogoutRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _authUseCase.signOut();
+    await SharedPrefs.clear();
+    emit(
+      AuthState.initial(),
+    );
   }
 }

@@ -74,12 +74,12 @@ class _ReadCacheClient implements ReadCacheClient {
   }
 
   @override
-  Future<AppUserDto?> createUser(SignUpReqDto signUpReqDto) async {
+  Future<AppUserDto?> createUser(CreateUserReqDto createUserReqDto) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(signUpReqDto.toJson());
+    _data.addAll(createUserReqDto.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>?>(_setStreamType<AppUserDto>(Options(
       method: 'POST',

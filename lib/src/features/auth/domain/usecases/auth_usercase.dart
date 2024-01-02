@@ -21,10 +21,10 @@ class AuthUseCase {
   }
 
   Future<Either<Failure, AppUserDto?>> createUser({
-    required SignUpReqDto signUpReqDto,
+    required CreateUserReqDto createUserReqDto,
   }) async {
     return _authRepositoryRepositoryImpl.createUser(
-      signUpReqDto: signUpReqDto,
+      createUserReqDto: createUserReqDto,
     );
   }
 
@@ -44,5 +44,9 @@ class AuthUseCase {
     return _authRepositoryRepositoryImpl.getUser(
       id: id,
     );
+  }
+
+  Future<void> signOut() async {
+    await _authRepositoryRepositoryImpl.signOut();
   }
 }

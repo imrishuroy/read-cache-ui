@@ -52,12 +52,12 @@ class AuthDataSource {
     return null;
   }
 
-  Future<AppUserDto?> createUse({
-    required SignUpReqDto signUpReqDto,
+  Future<AppUserDto?> createUser({
+    required CreateUserReqDto createUserReqDto,
   }) async {
     try {
       return await _readCacheClient.createUser(
-        signUpReqDto,
+        createUserReqDto,
       );
     } catch (error) {
       rethrow;
@@ -69,6 +69,14 @@ class AuthDataSource {
   }) async {
     try {
       return await _readCacheClient.getUser(id);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
     } catch (error) {
       rethrow;
     }

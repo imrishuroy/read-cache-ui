@@ -7,11 +7,6 @@ sealed class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AuthUserChanged extends AuthEvent {
-  const AuthUserChanged({required this.user});
-  final User? user;
-}
-
 class AuthLoggedIn extends AuthEvent {
   const AuthLoggedIn({
     required this.email,
@@ -25,16 +20,30 @@ class AuthLoggedIn extends AuthEvent {
   List<Object> get props => [email, password];
 }
 
-class AuthSigned extends AuthEvent {
-  const AuthSigned({
-    required this.name,
+class AuthSignedUp extends AuthEvent {
+  const AuthSignedUp({
     required this.email,
     required this.password,
   });
-  final String name;
+
   final String email;
   final String password;
 
   @override
-  List<Object> get props => [name, email, password];
+  List<Object> get props => [email, password];
 }
+
+class AuthUserCreated extends AuthEvent {
+  const AuthUserCreated({
+    required this.email,
+    required this.name,
+  });
+
+  final String email;
+  final String name;
+
+  @override
+  List<Object> get props => [email, name];
+}
+
+class AuthLogoutRequested extends AuthEvent {}

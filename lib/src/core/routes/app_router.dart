@@ -23,7 +23,15 @@ class AppRouter {
       GoRoute(
         path: '/register',
         pageBuilder: (context, state) => const MaterialPage(
-          child: RegisterPage(),
+          child: SignUpPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/create-user/:email',
+        pageBuilder: (context, state) => MaterialPage(
+          child: CreateUserPage(
+            email: state.pathParameters['email'],
+          ),
         ),
       ),
       GoRoute(

@@ -10,7 +10,7 @@ abstract class AuthRepository {
   });
 
   Future<Either<Failure, AppUserDto?>> createUser({
-    required SignUpReqDto signUpReqDto,
+    required CreateUserReqDto createUserReqDto,
   });
 
   Future<Either<Failure, UserCredential?>> login({
@@ -21,4 +21,6 @@ abstract class AuthRepository {
   Future<Either<Failure, AppUserDto?>> getUser({
     required String id,
   });
+
+  Future<void> signOut();
 }

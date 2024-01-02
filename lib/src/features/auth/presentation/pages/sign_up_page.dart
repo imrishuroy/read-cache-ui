@@ -6,22 +6,18 @@ import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authBloc = getIt<AuthBloc>();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +25,7 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         bloc: _authBloc,
         listener: (context, state) {
-          if (state.authStatus == AuthStatus.loggedIn &&
-              state.userStatus == UserStatus.authorized) {
-            context.go('/caches');
-          }
-          if (state.authStatus == AuthStatus.loggedIn &&
-              state.userStatus == UserStatus.unAuthorized) {
+          if (state.authStatus == AuthStatus.signedUp) {
             context.go(
               '/create-user/${_emailController.text}',
             );
@@ -42,13 +33,12 @@ class _LoginPageState extends State<LoginPage> {
           if (state.authStatus == AuthStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Failure: ${state.failure?.message}'),
+                content: Text('${state.failure?.message}'),
               ),
             );
           }
         },
         builder: (context, state) {
-          debugPrint('Auth State (Login) $state');
           return Center(
             child: Container(
               constraints: const BoxConstraints(
@@ -75,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            const Text('Sign in to continue'),
+                            const Text('Create an account to continue'),
                             const SizedBox(height: 20),
                             CustomTextField(
                               textEditingController: _emailController,
@@ -96,13 +86,13 @@ class _LoginPageState extends State<LoginPage> {
                                 fixedSize: const Size(400, 55),
                                 backgroundColor: Colors.blue,
                               ),
-                              onPressed: _signIn,
-                              child: const Text('Sign in'),
+                              onPressed: _signUp,
+                              child: const Text('Create an account'),
                             ),
                             const SizedBox(height: 20),
                             TextButton(
-                              onPressed: () => context.go('/register'),
-                              child: const Text('Create an account'),
+                              onPressed: () => context.go('/login'),
+                              child: const Text('Sign In'),
                             ),
                           ],
                         ),
@@ -115,10 +105,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _signIn() {
+  void _signUp() {
     if (_formKey.currentState!.validate()) {
       _authBloc.add(
-        AuthLoggedIn(
+        AuthSignedUp(
           email: _emailController.text,
           password: _passwordController.text,
         ),

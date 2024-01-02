@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/core/network/dio_exception.dart';
 import 'package:read_cache_ui/src/features/auth/data/data.dart';
@@ -33,17 +34,17 @@ class AuthRepositoryRepositoryImpl extends AuthRepository {
 
   @override
   Future<Either<Failure, AppUserDto?>> createUser({
-    required SignUpReqDto signUpReqDto,
+    required CreateUserReqDto createUserReqDto,
   }) async {
     try {
-      final response = await _authDataSource.createUse(
-        signUpReqDto: signUpReqDto,
+      final response = await _authDataSource.createUser(
+        createUserReqDto: createUserReqDto,
       );
       return Right(response);
-    } on DioException catch (error) {
+    } on FirebaseAuthException catch (error) {
       return Left(
         Failure(
-          message: DioExceptions.fromDioError(error).message,
+          message: error.message ?? error.toString(),
         ),
       );
     }
@@ -61,10 +62,10 @@ class AuthRepositoryRepositoryImpl extends AuthRepository {
       );
 
       return Right(userCredential);
-    } on DioException catch (error) {
+    } on FirebaseAuthException catch (error) {
       return Left(
         Failure(
-          message: DioExceptions.fromDioError(error).message,
+          message: error.message ?? error.toString(),
         ),
       );
     }
@@ -78,11 +79,18 @@ class AuthRepositoryRepositoryImpl extends AuthRepository {
       final response = await _authDataSource.getUser(id: id);
       return Right(response);
     } on DioException catch (error) {
+      debugPrint('Error ${error.response?.data}');
       return Left(
         Failure(
-          message: DioExceptions.fromDioError(error).message,
+          // message: DioExceptions.fromDioError(error).message,
+          message: error.response?.data.toString() ?? error.toString(),
         ),
       );
     }
+  }
+
+  @override
+  Future<void> signOut() async {
+    await _authDataSource.signOut();
   }
 }

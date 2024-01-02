@@ -16,6 +16,6 @@ abstract class ReadCacheClient {
 
   @POST('/users')
   Future<AppUserDto?> createUser(
-    @Body() SignUpReqDto signUpReqDto,
+    @Body() CreateUserReqDto createUserReqDto,
   );
 }

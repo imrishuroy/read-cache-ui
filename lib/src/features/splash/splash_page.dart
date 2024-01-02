@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:read_cache_ui/src/core/config/injection_container.dart';
-import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
+import 'package:read_cache_ui/src/core/config/shared_prefs.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -12,23 +10,28 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final _authBloc = getIt<AuthBloc>();
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      bloc: _authBloc,
-      listener: (context, state) {
-        if (state.status == AuthStatus.authenticated) {
-          debugPrint('authenticated user ${state.user}');
+  void initState() {
+    Future.delayed(
+      const Duration(seconds: 3),
+      () {
+        final token = SharedPrefs.getToken();
+        if (token != null) {
           context.go('/caches');
         } else {
           context.go('/login');
         }
       },
-      child: const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+    );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
