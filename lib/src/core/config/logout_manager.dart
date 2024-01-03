@@ -10,7 +10,7 @@ class LogoutManager {
 
   static Future<void> performLogout() async {
     final authBloc = getIt<AuthBloc>();
-    authBloc.add(AuthLogoutRequested());
+    authBloc.add(AuthSignOutRequested());
     final navigatorKeyContext =
         AppRouter().router.routerDelegate.navigatorKey.currentContext;
 

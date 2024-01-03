@@ -100,7 +100,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 backgroundColor: Colors.blue,
                               ),
                               onPressed: _createAccount,
-                              child: const Text('Create account'),
+                              child: const Text('Create an account'),
                             ),
                             const SizedBox(height: 20),
                             TextButton(

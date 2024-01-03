@@ -6,14 +6,14 @@ import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -29,11 +29,11 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         bloc: _authBloc,
         listener: (context, state) {
-          if (state.authStatus == AuthStatus.loggedIn &&
+          if (state.authStatus == AuthStatus.signedIn &&
               state.userStatus == UserStatus.authorized) {
             context.go('/caches');
           }
-          if (state.authStatus == AuthStatus.loggedIn &&
+          if (state.authStatus == AuthStatus.signedIn &&
               state.userStatus == UserStatus.unAuthorized) {
             context.go(
               '/create-user/${_emailController.text}',
@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
   void _signIn() {
     if (_formKey.currentState!.validate()) {
       _authBloc.add(
-        AuthLoggedIn(
+        AuthSignedIn(
           email: _emailController.text,
           password: _passwordController.text,
         ),

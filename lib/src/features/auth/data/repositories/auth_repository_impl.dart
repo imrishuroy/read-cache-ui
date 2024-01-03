@@ -3,13 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
-import 'package:read_cache_ui/src/core/network/dio_exception.dart';
 import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 
 class AuthRepositoryRepositoryImpl extends AuthRepository {
-  AuthRepositoryRepositoryImpl({required AuthDataSource authDataSource})
-      : _authDataSource = authDataSource;
+  AuthRepositoryRepositoryImpl({
+    required AuthDataSource authDataSource,
+  }) : _authDataSource = authDataSource;
   final AuthDataSource _authDataSource;
 
   @override
@@ -23,10 +23,10 @@ class AuthRepositoryRepositoryImpl extends AuthRepository {
         password: password,
       );
       return Right(response);
-    } on DioException catch (error) {
+    } on FirebaseAuthException catch (error) {
       return Left(
         Failure(
-          message: DioExceptions.fromDioError(error).message,
+          message: error.message ?? error.toString(),
         ),
       );
     }
@@ -51,12 +51,12 @@ class AuthRepositoryRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserCredential?>> login({
+  Future<Either<Failure, UserCredential?>> signIn({
     required String email,
     required String password,
   }) async {
     try {
-      final userCredential = await _authDataSource.login(
+      final userCredential = await _authDataSource.signIn(
         email: email,
         password: password,
       );
@@ -82,7 +82,6 @@ class AuthRepositoryRepositoryImpl extends AuthRepository {
       debugPrint('Error ${error.response?.data}');
       return Left(
         Failure(
-          // message: DioExceptions.fromDioError(error).message,
           message: error.response?.data.toString() ?? error.toString(),
         ),
       );

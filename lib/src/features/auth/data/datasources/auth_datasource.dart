@@ -28,7 +28,7 @@ class AuthDataSource {
     }
   }
 
-  Future<UserCredential?> login({
+  Future<UserCredential?> signIn({
     required String email,
     required String password,
   }) async {

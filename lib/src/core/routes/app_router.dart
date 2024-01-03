@@ -15,13 +15,13 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/login',
+        path: '/signin',
         pageBuilder: (context, state) => const MaterialPage(
-          child: LoginPage(),
+          child: SignInPage(),
         ),
       ),
       GoRoute(
-        path: '/register',
+        path: '/signup',
         pageBuilder: (context, state) => const MaterialPage(
           child: SignUpPage(),
         ),

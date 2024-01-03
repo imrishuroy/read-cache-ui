@@ -28,11 +28,11 @@ class AuthUseCase {
     );
   }
 
-  Future<Either<Failure, UserCredential?>> login({
+  Future<Either<Failure, UserCredential?>> signIn({
     required String email,
     required String password,
   }) async {
-    return _authRepositoryRepositoryImpl.login(
+    return _authRepositoryRepositoryImpl.signIn(
       email: email,
       password: password,
     );

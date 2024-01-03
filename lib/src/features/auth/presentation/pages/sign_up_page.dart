@@ -65,7 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            const Text('Create an account to continue'),
+                            const Text('Sign Up to continue'),
                             const SizedBox(height: 20),
                             CustomTextField(
                               textEditingController: _emailController,
@@ -87,7 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 backgroundColor: Colors.blue,
                               ),
                               onPressed: _signUp,
-                              child: const Text('Create an account'),
+                              child: const Text('Sign Up'),
                             ),
                             const SizedBox(height: 20),
                             TextButton(

@@ -14,12 +14,4 @@ class AppUserDto extends AppUser {
       name: map['name'] != null ? map['name'] as String : null,
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'id': id,
-      'email': email,
-      'name': name,
-    };
-  }
 }

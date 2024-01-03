@@ -13,7 +13,7 @@ abstract class AuthRepository {
     required CreateUserReqDto createUserReqDto,
   });
 
-  Future<Either<Failure, UserCredential?>> login({
+  Future<Either<Failure, UserCredential?>> signIn({
     required String email,
     required String password,
   });

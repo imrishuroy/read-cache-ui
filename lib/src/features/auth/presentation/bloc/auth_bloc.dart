@@ -17,15 +17,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required AuthUseCase authUseCase,
   })  : _authUseCase = authUseCase,
         super(AuthState.initial()) {
-    on<AuthLoggedIn>(_onAuthLoggedIn);
+    on<AuthSignedIn>(_onAuthSignedIn);
     on<AuthSignedUp>(_onAuthSignedUp);
     on<AuthUserCreated>(_onAuthUserCreated);
-    on<AuthLogoutRequested>(_onAuthLogoutRequested);
+    on<AuthSignOutRequested>(_onAuthSignOutRequested);
   }
   final AuthUseCase _authUseCase;
 
-  Future<void> _onAuthLoggedIn(
-    AuthLoggedIn event,
+  Future<void> _onAuthSignedIn(
+    AuthSignedIn event,
     Emitter<AuthState> emit,
   ) async {
     emit(
@@ -34,7 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ),
     );
 
-    final userCredRes = await _authUseCase.login(
+    final userCredRes = await _authUseCase.signIn(
       email: event.email,
       password: event.password,
     );
@@ -51,7 +51,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (userCredential) {
         emit(
           state.copyWith(
-            // authStatus: AuthStatus.loggedIn,
             firebaseUser: userCredential?.user,
           ),
         );
@@ -59,7 +58,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     if (state.firebaseUser != null) {
       final idToken = await state.firebaseUser?.getIdToken();
-      //  debugPrint('token $idToken');
 
       if (idToken != null) {
         await SharedPrefs.setToken(token: idToken);
@@ -69,23 +67,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         id: state.firebaseUser?.uid,
       );
 
-      // debugPrint('user res $userRes');
-
-      userRes.fold(
+      await userRes.fold(
         (failure) {
           emit(
             state.copyWith(
-              // authStatus: AuthStatus.failure,
-              authStatus: AuthStatus.loggedIn,
+              authStatus: AuthStatus.signedIn,
               failure: failure,
             ),
           );
         },
-        (user) {
+        (user) async {
+          await SharedPrefs.setAppUser(
+            appUser: AppUser(
+              id: user?.id,
+              email: user?.email,
+              name: user?.name,
+            ),
+          );
           emit(
             state.copyWith(
               user: user,
-              authStatus: AuthStatus.loggedIn,
+              authStatus: AuthStatus.signedIn,
               userStatus: UserStatus.authorized,
             ),
           );
@@ -151,7 +153,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ),
     );
 
-    response.fold(
+    await response.fold(
       (failure) {
         emit(
           state.copyWith(
@@ -160,7 +162,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ),
         );
       },
-      (user) {
+      (user) async {
+        await SharedPrefs.setAppUser(
+          appUser: AppUser(
+            id: user?.id,
+            email: user?.email,
+            name: user?.name,
+          ),
+        );
         emit(
           state.copyWith(
             userStatus: UserStatus.authorized,
@@ -171,8 +180,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onAuthLogoutRequested(
-    AuthLogoutRequested event,
+  Future<void> _onAuthSignOutRequested(
+    AuthSignOutRequested event,
     Emitter<AuthState> emit,
   ) async {
     await _authUseCase.signOut();

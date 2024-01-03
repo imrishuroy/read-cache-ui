@@ -18,7 +18,7 @@ class _CachesListPageState extends State<CachesListPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.logout),
         onPressed: () async {
-          _authBloc.add(AuthLogoutRequested());
+          _authBloc.add(AuthSignOutRequested());
           context.go('/login');
         },
       ),

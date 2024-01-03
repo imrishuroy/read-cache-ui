@@ -3,7 +3,7 @@ part of 'auth_bloc.dart';
 enum AuthStatus {
   initial,
   loading,
-  loggedIn,
+  signedIn,
   signedUp,
 
   failure,
