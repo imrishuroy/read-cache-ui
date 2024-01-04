@@ -6,3 +6,5 @@ abstract class CacheEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class CacheListLoaded extends CacheEvent {}

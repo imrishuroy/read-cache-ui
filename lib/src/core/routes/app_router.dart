@@ -4,8 +4,11 @@ import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/pages/caches_list_page.dart';
 import 'package:read_cache_ui/src/features/splash/splash_page.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>(debugLabel: 'parent');
+
 class AppRouter {
   GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: '/',
     routes: [
       GoRoute(

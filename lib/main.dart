@@ -31,6 +31,8 @@ class ReadCache extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routerConfig: appRouter.router,
+      // routeInformationParser: appRouter.router.routeInformationParser,
+      // routerDelegate: appRouter.router.routerDelegate,
       darkTheme: ThemeData.dark(),
     );
   }

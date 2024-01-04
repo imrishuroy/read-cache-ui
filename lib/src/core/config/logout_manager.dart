@@ -11,6 +11,7 @@ class LogoutManager {
   static Future<void> performLogout() async {
     final authBloc = getIt<AuthBloc>();
     authBloc.add(AuthSignOutRequested());
+
     final navigatorKeyContext =
         AppRouter().router.routerDelegate.navigatorKey.currentContext;
 
@@ -18,7 +19,7 @@ class LogoutManager {
       Navigator.of(navigatorKeyContext, rootNavigator: true).popUntil(
         (route) => route.isFirst,
       );
-      await GoRouter.of(navigatorKeyContext).pushReplacement('/login');
+      await GoRouter.of(navigatorKeyContext).pushReplacement('/signin');
     }
   }
 }
