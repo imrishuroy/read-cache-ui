@@ -4,6 +4,7 @@ enum CacheStatus {
   initial,
   loading,
   success,
+
   failure,
 }
 

@@ -19,7 +19,7 @@ abstract class AuthRepository {
   });
 
   Future<Either<Failure, AppUserDto?>> getUser({
-    required String id,
+    required String? id,
   });
 
   Future<void> signOut();

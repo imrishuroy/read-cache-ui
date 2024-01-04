@@ -3,14 +3,14 @@ import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/cache/data/data.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'read_cache_client.g.dart';
+part 'cache_client.g.dart';
 
 @RestApi()
-abstract class ReadCacheClient {
-  factory ReadCacheClient(
+abstract class CacheClient {
+  factory CacheClient(
     Dio dio, {
     String baseUrl,
-  }) = _ReadCacheClient;
+  }) = _CacheClient;
 
   @GET('/')
   Future<String> ping();
@@ -22,6 +22,9 @@ abstract class ReadCacheClient {
   Future<AppUserDto?> createUser(
     @Body() CreateUserReqDto createUserReqDto,
   );
+
+  @POST('/caches')
+  Future<CacheDto?> createCache(@Body() CacheDto cache);
 
   @GET('/caches?page_size={page_size}&page_id={page_id}')
   Future<List<CacheDto?>> listCaches(

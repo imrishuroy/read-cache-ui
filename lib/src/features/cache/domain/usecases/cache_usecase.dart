@@ -5,16 +5,24 @@ import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
 class CacheUseCase {
   CacheUseCase({
-    required CacheRepositoryImpl cacheRepositoryImpl,
-  }) : _cacheRepositoryImpl = cacheRepositoryImpl;
+    required CacheRepository cacheRepository,
+  }) : _cacheRepository = cacheRepository;
 
-  final CacheRepositoryImpl _cacheRepositoryImpl;
+  final CacheRepository _cacheRepository;
+
+  Future<Either<Failure, Cache?>> createCache({
+    required CacheDto cacheDto,
+  }) async {
+    return _cacheRepository.createCache(
+      cacheDto: cacheDto,
+    );
+  }
 
   Future<Either<Failure, List<Cache?>>> listCaches({
     required int pageSize,
     required int pageId,
   }) async {
-    return _cacheRepositoryImpl.listCaches(
+    return _cacheRepository.listCaches(
       pageSize: pageSize,
       pageId: pageId,
     );
