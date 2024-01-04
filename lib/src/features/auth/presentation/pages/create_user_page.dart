@@ -104,7 +104,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                             ),
                             const SizedBox(height: 20),
                             TextButton(
-                              onPressed: () => context.go('/login'),
+                              onPressed: () => context.go('/signin'),
                               child: const Text('Go back'),
                             ),
                           ],

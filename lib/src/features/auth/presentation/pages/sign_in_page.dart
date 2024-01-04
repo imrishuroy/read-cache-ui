@@ -101,7 +101,7 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                             const SizedBox(height: 20),
                             TextButton(
-                              onPressed: () => context.go('/register'),
+                              onPressed: () => context.go('/signup'),
                               child: const Text('Create an account'),
                             ),
                           ],

@@ -39,10 +39,10 @@ class AuthInterceptor extends Interceptor {
       'Error code: ${err.response?.statusCode}, '
       'Message: ${err.message}',
     );
-    super.onError(err, handler);
 
     if (err.response?.statusCode == 401) {
       await LogoutManager.performLogout();
     }
+    super.onError(err, handler);
   }
 }

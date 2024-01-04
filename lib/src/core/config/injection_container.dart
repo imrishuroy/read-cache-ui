@@ -6,6 +6,9 @@ import 'package:read_cache_ui/src/core/network/read_cache_client.dart';
 import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/cache/data/data.dart';
+import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
+import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
 
 final getIt = GetIt.instance;
 
@@ -16,13 +19,22 @@ Future<void> init() async {
     ),
   );
 
+  getIt.registerFactory(
+    () => CacheBloc(
+      cacheUseCase: getIt(),
+    ),
+  );
+
   getIt.registerLazySingleton(
     () => AuthDataSource(
       firebaseAuth: FirebaseAuth.instance,
-      readCacheClient: ReadCacheClient(
-        getIt(),
-        baseUrl: APIConstants.baseUrl,
-      ),
+      readCacheClient: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton(
+    () => CacheDataSource(
+      readCacheClient: getIt(),
     ),
   );
 
@@ -33,8 +45,27 @@ Future<void> init() async {
   );
 
   getIt.registerLazySingleton(
+    () => CacheRepositoryImpl(
+      cacheDataSource: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton(
     () => AuthUseCase(
       authRepositoryRepositoryImpl: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton(
+    () => CacheUseCase(
+      cacheRepositoryImpl: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton(
+    () => ReadCacheClient(
+      getIt(),
+      baseUrl: APIConstants.baseUrl,
     ),
   );
 

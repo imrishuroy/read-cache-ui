@@ -25,7 +25,7 @@ class _SplashPageState extends State<SplashPage> {
         if (token != null && appUser != null) {
           context.go('/caches');
         } else {
-          context.go('/login');
+          context.go('/signin');
         }
       },
     );
@@ -70,11 +70,10 @@ class CircularMovingWidgetState extends State<CircularMovingWidget>
   void initState() {
     super.initState();
 
-    // Create an animation controller
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4), // Adjust duration as needed
-    )..repeat(); // Repeats the animation
+      duration: const Duration(seconds: 4),
+    )..repeat();
 
     _animationController!.addListener(() {
       setState(() {});
