@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'read_cache_client.dart';
+part of 'cache_client.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'read_cache_client.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _ReadCacheClient implements ReadCacheClient {
-  _ReadCacheClient(
+class _CacheClient implements CacheClient {
+  _CacheClient(
     this._dio, {
     this.baseUrl,
   });
@@ -99,6 +99,35 @@ class _ReadCacheClient implements ReadCacheClient {
             ))));
     final value =
         _result.data == null ? null : AppUserDto.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CacheDto?> createCache(CacheDto cache) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(cache.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>?>(_setStreamType<CacheDto>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/caches',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value =
+        _result.data == null ? null : CacheDto.fromJson(_result.data!);
     return value;
   }
 

@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:read_cache_ui/src/core/network/read_cache_client.dart';
+import 'package:read_cache_ui/src/core/network/cache_client.dart';
 import 'package:read_cache_ui/src/features/auth/data/data.dart';
 
 class AuthDataSource {
   AuthDataSource({
     required FirebaseAuth firebaseAuth,
-    required ReadCacheClient readCacheClient,
+    required CacheClient readCacheClient,
   })  : _firebaseAuth = firebaseAuth,
         _readCacheClient = readCacheClient;
 
   final FirebaseAuth _firebaseAuth;
-  final ReadCacheClient _readCacheClient;
+  final CacheClient _readCacheClient;
 
   Future<UserCredential?> signUp({
     required String email,

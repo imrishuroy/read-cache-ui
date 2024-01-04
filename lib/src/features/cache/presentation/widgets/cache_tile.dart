@@ -67,7 +67,6 @@ class CacheTile extends StatelessWidget {
     if (url == null) return;
     final url0 = Uri.parse(url);
     if (await launchUrl(url0)) {
-      await launchUrl(url0);
     } else {
       throw 'Could not launch $url0';
     }

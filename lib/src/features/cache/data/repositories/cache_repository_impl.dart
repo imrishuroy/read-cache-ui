@@ -11,6 +11,25 @@ class CacheRepositoryImpl extends CacheRepository {
   final CacheDataSource _cacheDataSource;
 
   @override
+  Future<Either<Failure, Cache?>> createCache({
+    required CacheDto cacheDto,
+  }) async {
+    try {
+      final cache = await _cacheDataSource.createCache(
+        cacheDto: cacheDto,
+      );
+      return Right(cache);
+    } on DioException catch (error) {
+      return Left(
+        Failure(
+          statusCode: error.response?.statusCode,
+          message: error.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, List<Cache?>>> listCaches({
     required int pageSize,
     required int pageId,

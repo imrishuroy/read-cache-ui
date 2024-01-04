@@ -2,6 +2,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
+import 'package:read_cache_ui/src/features/cache/data/data.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -26,6 +27,7 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
         _throttleDuration,
       ),
     );
+    on<CacheCreated>(_onCacheCreated);
   }
   final CacheUseCase _cacheUseCase;
 
@@ -108,5 +110,43 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
         },
       );
     }
+  }
+
+  Future<void> _onCacheCreated(
+    CacheCreated event,
+    Emitter<CacheState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: CacheStatus.loading,
+      ),
+    );
+    final response = await _cacheUseCase.createCache(
+      cacheDto: CacheDto(
+        title: event.title,
+        link: event.link,
+      ),
+    );
+    response.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            status: CacheStatus.failure,
+            failure: failure,
+          ),
+        );
+      },
+      (cache) {
+        emit(
+          state.copyWith(
+            // cacheList: [
+            //   cache,
+            //   ...state.cacheList,
+            // ],
+            status: CacheStatus.success,
+          ),
+        );
+      },
+    );
   }
 }

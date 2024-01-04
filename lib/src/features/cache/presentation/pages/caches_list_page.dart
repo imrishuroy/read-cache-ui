@@ -30,6 +30,12 @@ class _CachesListPageState extends State<CachesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.go(
+          '/create-cache',
+        ),
+        child: const Icon(Icons.add),
+      ),
       appBar: AppBar(
         title: const Text('Read Cache'),
         centerTitle: true,

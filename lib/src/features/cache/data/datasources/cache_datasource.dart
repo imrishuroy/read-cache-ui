@@ -1,12 +1,24 @@
-import 'package:read_cache_ui/src/core/network/read_cache_client.dart';
+import 'package:read_cache_ui/src/core/network/cache_client.dart';
 import 'package:read_cache_ui/src/features/cache/data/data.dart';
 
 class CacheDataSource {
   CacheDataSource({
-    required ReadCacheClient readCacheClient,
+    required CacheClient readCacheClient,
   }) : _readCacheClient = readCacheClient;
 
-  final ReadCacheClient _readCacheClient;
+  final CacheClient _readCacheClient;
+
+  Future<CacheDto?> createCache({
+    required CacheDto cacheDto,
+  }) async {
+    try {
+      return _readCacheClient.createCache(
+        cacheDto,
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
 
   Future<List<CacheDto?>> listCaches({
     required int pageSize,
@@ -17,7 +29,7 @@ class CacheDataSource {
         pageSize,
         pageId,
       );
-    } catch (error) {
+    } catch (_) {
       rethrow;
     }
   }

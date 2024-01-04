@@ -6,8 +6,8 @@ import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 
-class AuthRepositoryRepositoryImpl extends AuthRepository {
-  AuthRepositoryRepositoryImpl({
+class AuthRepositoryImpl extends AuthRepository {
+  AuthRepositoryImpl({
     required AuthDataSource authDataSource,
   }) : _authDataSource = authDataSource;
   final AuthDataSource _authDataSource;
