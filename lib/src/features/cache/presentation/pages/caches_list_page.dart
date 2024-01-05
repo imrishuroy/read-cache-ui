@@ -60,6 +60,14 @@ class _CachesListPageState extends State<CachesListPage> {
               ),
             );
           }
+          if (state.status == CacheStatus.success &&
+              state.actionStatus == CacheActionStatus.deleted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cache Deleted'),
+              ),
+            );
+          }
         },
         builder: (context, state) {
           if (state.status == CacheStatus.loading) {
@@ -97,9 +105,48 @@ class _CachesListPageState extends State<CachesListPage> {
                           );
                         }
                         final cache = cacheList[index];
-                        return CacheTile(
-                          cache: cache,
-                          index: index,
+                        return Dismissible(
+                          key: Key('${cache?.id}'),
+                          onDismissed: (direction) {
+                            if (direction == DismissDirection.endToStart) {
+                              if (cache?.id != null) {
+                                _cacheBloc.add(
+                                  CacheDeleted(
+                                    id: cache!.id!,
+                                  ),
+                                );
+                              }
+                            } else {
+                              context.go(
+                                '/update-cache',
+                                extra: cache,
+                              );
+                            }
+                          },
+                          background: const ColoredBox(
+                            color: Colors.green,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 16),
+                                child: Icon(Icons.edit),
+                              ),
+                            ),
+                          ),
+                          secondaryBackground: ColoredBox(
+                            color: Colors.red.shade500,
+                            child: const Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 16),
+                                child: Icon(Icons.delete),
+                              ),
+                            ),
+                          ),
+                          child: CacheTile(
+                            cache: cache,
+                            index: index,
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) => const Divider(),

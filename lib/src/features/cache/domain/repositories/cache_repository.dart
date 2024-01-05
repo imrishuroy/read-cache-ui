@@ -12,4 +12,12 @@ abstract class CacheRepository {
     required int pageSize,
     required int pageId,
   });
+
+  Future<Either<Failure, Cache?>> updateCache({
+    required CacheDto cacheDto,
+  });
+
+  Future<Either<Failure, void>> deleteCache({
+    required int id,
+  });
 }

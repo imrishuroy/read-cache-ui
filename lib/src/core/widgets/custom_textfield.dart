@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     required this.validator,
     this.readOnly = false,
+    this.isLinkField = false,
     this.onChanged,
     super.key,
   });
@@ -15,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final bool readOnly;
+  final bool isLinkField;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,11 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       readOnly: readOnly,
+      style: isLinkField
+          ? const TextStyle(
+              color: Colors.blue,
+            )
+          : null,
     );
   }
 }

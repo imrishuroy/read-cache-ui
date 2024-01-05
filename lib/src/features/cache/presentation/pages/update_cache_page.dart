@@ -4,28 +4,39 @@ import 'package:go_router/go_router.dart';
 import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
+import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
 
-class CreateCachePage extends StatefulWidget {
-  const CreateCachePage({
+class UpdateCachePage extends StatefulWidget {
+  const UpdateCachePage({
+    required this.cache,
     super.key,
   });
 
+  final Cache? cache;
+
   @override
-  State<CreateCachePage> createState() => _CreateCachePageState();
+  State<UpdateCachePage> createState() => _UpdateCachePageState();
 }
 
-class _CreateCachePageState extends State<CreateCachePage> {
+class _UpdateCachePageState extends State<UpdateCachePage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _linkController = TextEditingController();
-
   final _cacheBloc = getIt<CacheBloc>();
+
+  @override
+  void initState() {
+    _titleController.text = widget.cache?.title ?? '';
+    _linkController.text = widget.cache?.link ?? '';
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Cache'),
+        title: const Text('Update Cache'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -35,7 +46,7 @@ class _CreateCachePageState extends State<CreateCachePage> {
           if (state.status == CacheStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Cache Created'),
+                content: Text('Cache Updated'),
               ),
             );
             context.go('/caches');
@@ -87,7 +98,7 @@ class _CreateCachePageState extends State<CreateCachePage> {
                       backgroundColor: Colors.blue,
                     ),
                     onPressed: _addCache,
-                    child: const Text('Create Cache'),
+                    child: const Text('Update Cache'),
                   ),
                 ],
               ),
@@ -101,9 +112,12 @@ class _CreateCachePageState extends State<CreateCachePage> {
   void _addCache() {
     if (_formKey.currentState!.validate()) {
       _cacheBloc.add(
-        CacheCreated(
-          title: _titleController.text,
-          link: _linkController.text,
+        CacheUpdated(
+          cache: Cache(
+            id: widget.cache?.id,
+            title: _titleController.text,
+            link: _linkController.text,
+          ),
         ),
       );
     }

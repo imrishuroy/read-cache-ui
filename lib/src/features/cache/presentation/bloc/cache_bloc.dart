@@ -28,6 +28,8 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
       ),
     );
     on<CacheCreated>(_onCacheCreated);
+    on<CacheUpdated>(_onCacheUpdated);
+    on<CacheDeleted>(_onCacheDeleted);
   }
   final CacheUseCase _cacheUseCase;
 
@@ -148,5 +150,77 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
         );
       },
     );
+  }
+
+  Future<void> _onCacheUpdated(
+    CacheUpdated event,
+    Emitter<CacheState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: CacheStatus.loading,
+      ),
+    );
+
+    final cache = event.cache;
+
+    final response = await _cacheUseCase.updateCache(
+      cacheDto: CacheDto(
+        id: cache?.id,
+        title: cache?.title,
+        link: cache?.link,
+      ),
+    );
+
+    response.fold((failure) {
+      emit(
+        state.copyWith(
+          failure: failure,
+          status: CacheStatus.failure,
+        ),
+      );
+    }, (cache) {
+      emit(
+        state.copyWith(
+          status: CacheStatus.success,
+        ),
+      );
+    });
+  }
+
+  Future<void> _onCacheDeleted(
+    CacheDeleted event,
+    Emitter<CacheState> emit,
+  ) async {
+    // emit(
+    //   state.copyWith(
+    //     status: CacheStatus.loading,
+    //   ),
+    // );
+
+    final response = await _cacheUseCase.deleteCache(
+      id: event.id,
+    );
+
+    response.fold((failure) {
+      emit(
+        state.copyWith(
+          failure: failure,
+          status: CacheStatus.failure,
+        ),
+      );
+    }, (cache) {
+      emit(
+        state.copyWith(
+          cacheList: [
+            ...state.cacheList.where(
+              (element) => element?.id != event.id,
+            ),
+          ],
+          actionStatus: CacheActionStatus.deleted,
+          status: CacheStatus.success,
+        ),
+      );
+    });
   }
 }

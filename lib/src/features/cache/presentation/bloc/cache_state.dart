@@ -4,13 +4,20 @@ enum CacheStatus {
   initial,
   loading,
   success,
-
   failure,
+}
+
+enum CacheActionStatus {
+  initial,
+  created,
+  updated,
+  deleted,
 }
 
 class CacheState extends Equatable {
   const CacheState({
     required this.status,
+    required this.actionStatus,
     required this.cacheList,
     this.pageId = 1,
     this.hasReachedMax = false,
@@ -19,10 +26,12 @@ class CacheState extends Equatable {
 
   factory CacheState.initial() => const CacheState(
         status: CacheStatus.initial,
+        actionStatus: CacheActionStatus.initial,
         cacheList: [],
       );
 
   final CacheStatus status;
+  final CacheActionStatus actionStatus;
   final List<Cache?> cacheList;
   final int pageId;
   final bool hasReachedMax;
@@ -30,6 +39,7 @@ class CacheState extends Equatable {
 
   CacheState copyWith({
     CacheStatus? status,
+    CacheActionStatus? actionStatus,
     List<Cache?>? cacheList,
     int? pageId,
     bool? hasReachedMax,
@@ -37,6 +47,7 @@ class CacheState extends Equatable {
   }) {
     return CacheState(
       status: status ?? this.status,
+      actionStatus: actionStatus ?? this.actionStatus,
       cacheList: cacheList ?? this.cacheList,
       pageId: pageId ?? this.pageId,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
@@ -50,6 +61,7 @@ class CacheState extends Equatable {
   @override
   List<Object?> get props => [
         status,
+        actionStatus,
         cacheList,
         pageId,
         hasReachedMax,

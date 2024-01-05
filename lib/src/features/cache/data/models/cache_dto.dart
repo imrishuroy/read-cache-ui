@@ -23,9 +23,14 @@ class CacheDto extends Cache {
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
+    final jsonMap = <String, dynamic>{
       'title': title,
       'link': link,
     };
+    if (id != null) {
+      jsonMap['id'] = id;
+    }
+
+    return jsonMap;
   }
 }
