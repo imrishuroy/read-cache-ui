@@ -103,12 +103,12 @@ class _CacheClient implements CacheClient {
   }
 
   @override
-  Future<CacheDto?> createCache(CacheDto cache) async {
+  Future<CacheDto?> createCache(CacheDto cacheDto) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(cache.toJson());
+    _data.addAll(cacheDto.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>?>(_setStreamType<CacheDto>(Options(
       method: 'POST',
@@ -162,6 +162,59 @@ class _CacheClient implements CacheClient {
             i == null ? null : CacheDto.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
+  }
+
+  @override
+  Future<CacheDto?> updateCache(CacheDto cacheDto) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(cacheDto.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>?>(_setStreamType<CacheDto>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/caches',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value =
+        _result.data == null ? null : CacheDto.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<void> deleteCache(int id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/caches/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

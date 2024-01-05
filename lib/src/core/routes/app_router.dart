@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/splash/splash_page.dart';
 
@@ -46,7 +47,15 @@ class AppRouter {
       GoRoute(
         path: '/create-cache',
         pageBuilder: (context, state) => const MaterialPage(
-          child: CreateCacheListPage(),
+          child: CreateCachePage(),
+        ),
+      ),
+      GoRoute(
+        path: '/update-cache',
+        pageBuilder: (context, state) => MaterialPage(
+          child: UpdateCachePage(
+            cache: state.extra as Cache?,
+          ),
         ),
       ),
     ],

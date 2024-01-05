@@ -34,7 +34,7 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<CacheDataSource>(
     () => CacheDataSource(
-      readCacheClient: getIt(),
+      cacheClient: getIt(),
     ),
   );
 

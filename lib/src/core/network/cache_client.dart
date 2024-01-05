@@ -24,11 +24,17 @@ abstract class CacheClient {
   );
 
   @POST('/caches')
-  Future<CacheDto?> createCache(@Body() CacheDto cache);
+  Future<CacheDto?> createCache(@Body() CacheDto cacheDto);
 
   @GET('/caches?page_size={page_size}&page_id={page_id}')
   Future<List<CacheDto?>> listCaches(
     @Path('page_size') int pageSize,
     @Path('page_id') int pageId,
   );
+
+  @PUT('/caches')
+  Future<CacheDto?> updateCache(@Body() CacheDto cacheDto);
+
+  @DELETE('/caches/{id}')
+  Future<void> deleteCache(@Path('id') int id);
 }

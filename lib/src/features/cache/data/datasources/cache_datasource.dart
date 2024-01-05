@@ -3,16 +3,16 @@ import 'package:read_cache_ui/src/features/cache/data/data.dart';
 
 class CacheDataSource {
   CacheDataSource({
-    required CacheClient readCacheClient,
-  }) : _readCacheClient = readCacheClient;
+    required CacheClient cacheClient,
+  }) : _cacheClient = cacheClient;
 
-  final CacheClient _readCacheClient;
+  final CacheClient _cacheClient;
 
   Future<CacheDto?> createCache({
     required CacheDto cacheDto,
   }) async {
     try {
-      return _readCacheClient.createCache(
+      return _cacheClient.createCache(
         cacheDto,
       );
     } catch (_) {
@@ -25,9 +25,33 @@ class CacheDataSource {
     required int pageId,
   }) async {
     try {
-      return await _readCacheClient.listCaches(
+      return await _cacheClient.listCaches(
         pageSize,
         pageId,
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<CacheDto?> updateCache({
+    required CacheDto cacheDto,
+  }) async {
+    try {
+      return _cacheClient.updateCache(
+        cacheDto,
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteCache({
+    required int id,
+  }) async {
+    try {
+      return _cacheClient.deleteCache(
+        id,
       );
     } catch (_) {
       rethrow;

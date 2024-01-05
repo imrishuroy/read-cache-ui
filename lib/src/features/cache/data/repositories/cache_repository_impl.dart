@@ -49,4 +49,43 @@ class CacheRepositoryImpl extends CacheRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, Cache?>> updateCache({
+    required CacheDto cacheDto,
+  }) async {
+    try {
+      final cache = await _cacheDataSource.updateCache(
+        cacheDto: cacheDto,
+      );
+      return Right(cache);
+    } on DioException catch (error) {
+      return Left(
+        Failure(
+          statusCode: error.response?.statusCode,
+          message: error.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteCache({
+    required int id,
+  }) async {
+    try {
+      return Right(
+        await _cacheDataSource.deleteCache(
+          id: id,
+        ),
+      );
+    } on DioException catch (error) {
+      return Left(
+        Failure(
+          statusCode: error.response?.statusCode,
+          message: error.toString(),
+        ),
+      );
+    }
+  }
 }

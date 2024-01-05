@@ -21,3 +21,19 @@ class CacheCreated extends CacheEvent {
   @override
   List<Object> get props => [title, link];
 }
+
+class CacheUpdated extends CacheEvent {
+  const CacheUpdated({
+    required this.cache,
+  });
+
+  final Cache? cache;
+}
+
+class CacheDeleted extends CacheEvent {
+  const CacheDeleted({
+    required this.id,
+  });
+
+  final int id;
+}

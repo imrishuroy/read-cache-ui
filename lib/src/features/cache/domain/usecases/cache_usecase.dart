@@ -27,4 +27,20 @@ class CacheUseCase {
       pageId: pageId,
     );
   }
+
+  Future<Either<Failure, Cache?>> updateCache({
+    required CacheDto cacheDto,
+  }) async {
+    return _cacheRepository.updateCache(
+      cacheDto: cacheDto,
+    );
+  }
+
+  Future<Either<Failure, void>> deleteCache({
+    required int id,
+  }) async {
+    return _cacheRepository.deleteCache(
+      id: id,
+    );
+  }
 }

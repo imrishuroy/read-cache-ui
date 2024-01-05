@@ -51,4 +51,17 @@ class Validator {
     }
     return null;
   }
+
+  static bool isValidLink(String? value) {
+    if (value == null || value.isEmpty) {
+      return false;
+    }
+    final linkRegExp = RegExp(
+      r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$',
+    );
+    if (!linkRegExp.hasMatch(value)) {
+      return false;
+    }
+    return true;
+  }
 }
