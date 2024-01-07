@@ -77,6 +77,12 @@ class _CachesListPageState extends State<CachesListPage> {
           }
 
           final cacheList = state.cacheList;
+          if (cacheList.isEmpty) {
+            return const Center(
+              child: Text('No Cache Found'),
+            );
+          }
+
           return Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,

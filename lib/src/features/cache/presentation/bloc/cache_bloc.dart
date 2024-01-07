@@ -67,6 +67,7 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
           emit(
             state.copyWith(
               cacheList: cacheList,
+              hasReachedMax: cacheList.length < pageSize,
               status: CacheStatus.success,
             ),
           );
