@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:read_cache_ui/src/core/config/injection_container.dart';
+import 'package:read_cache_ui/src/core/network/firebase_performance_service.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
 
@@ -17,13 +18,25 @@ class _CachesListPageState extends State<CachesListPage> {
   final _authBloc = getIt<AuthBloc>();
   final _cacheBloc = getIt<CacheBloc>();
   final _scrollController = ScrollController();
+  late DateTime _starTime;
+  late DateTime _endTime;
 
   @override
   void initState() {
+    _starTime = DateTime.now();
     _cacheBloc.add(
       CacheListLoaded(),
     );
     _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _endTime = DateTime.now();
+      final difference = _endTime.difference(_starTime);
+      //debugPrint('page load: ${difference.inMilliseconds}ms');
+      FirebasePerformanceService.setPageLoad(
+        pageName: 'caches_list',
+        value: difference.inMilliseconds,
+      );
+    });
     super.initState();
   }
 
