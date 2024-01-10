@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
+@lazySingleton
 class CacheUseCase {
   CacheUseCase({
     required CacheRepository cacheRepository,

@@ -6,9 +6,9 @@ import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 class AuthDataSource {
   AuthDataSource({
     required FirebaseAuth firebaseAuth,
-    required CacheClient readCacheClient,
+    required CacheClient cacheClient,
   })  : _firebaseAuth = firebaseAuth,
-        _readCacheClient = readCacheClient;
+        _readCacheClient = cacheClient;
 
   final FirebaseAuth _firebaseAuth;
   final CacheClient _readCacheClient;

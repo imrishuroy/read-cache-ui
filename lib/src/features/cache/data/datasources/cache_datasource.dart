@@ -1,6 +1,8 @@
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/network/cache_client.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
+@lazySingleton
 class CacheDataSource {
   CacheDataSource({
     required CacheClient cacheClient,

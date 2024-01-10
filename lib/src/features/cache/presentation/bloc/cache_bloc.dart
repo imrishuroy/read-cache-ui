@@ -1,6 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -15,6 +16,7 @@ EventTransformer<E> _throttleDroppable<E>(Duration duration) {
   };
 }
 
+@injectable
 class CacheBloc extends Bloc<CacheEvent, CacheState> {
   CacheBloc({
     required CacheUseCase cacheUseCase,

@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/cache/data/data.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
+@LazySingleton(as: CacheRepository)
 class CacheRepositoryImpl extends CacheRepository {
   CacheRepositoryImpl({
     required CacheDataSource cacheDataSource,

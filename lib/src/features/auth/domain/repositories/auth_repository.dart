@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 
+
 abstract class AuthRepository {
   Future<Either<Failure, UserCredential?>> signUp({
     required String email,

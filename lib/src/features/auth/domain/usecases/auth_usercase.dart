@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 
+@lazySingleton
 class AuthUseCase {
   AuthUseCase({
     required AuthRepository authRepository,
