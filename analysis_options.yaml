@@ -14,6 +14,7 @@ analyzer:
   errors:
     todo: ignore
     prefer_function_declarations_over_variables: ignore
+    invalid_annotation_target: ignore
     unused_import: warning
       
   

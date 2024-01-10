@@ -41,10 +41,10 @@ class AuthRepositoryImpl extends AuthRepository {
         createUserReqDto: createUserReqDto,
       );
       return Right(response);
-    } on FirebaseAuthException catch (error) {
+    } on DioException catch (error) {
       return Left(
         Failure(
-          message: error.message ?? error.toString(),
+          message: error.response?.data.toString() ?? error.toString(),
         ),
       );
     }

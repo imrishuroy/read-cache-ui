@@ -100,9 +100,9 @@ class _UpdateCachePageState extends State<UpdateCachePage> {
                   ),
                   CustomTextField(
                     textEditingController: _linkController,
-                    hintText: 'Cache Link',
-                    validator: (value) => Validator.validateLink(value),
-                    isLinkField: Validator.isValidLink(_linkController.text),
+                    hintText: 'Cache Content',
+                    validator: (value) => Validator.validateCacheContent(value),
+                    //isLinkField: Validator.isValidLink(_linkController.text),
                   ),
                   const SizedBox(height: 40),
                   ElevatedButton(

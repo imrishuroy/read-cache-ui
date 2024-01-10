@@ -27,7 +27,7 @@ class CacheUpdated extends CacheEvent {
     required this.cache,
   });
 
-  final Cache? cache;
+  final Cache cache;
 }
 
 class CacheDeleted extends CacheEvent {

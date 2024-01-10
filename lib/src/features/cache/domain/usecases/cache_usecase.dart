@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
-import 'package:read_cache_ui/src/features/cache/data/data.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
 class CacheUseCase {
@@ -11,10 +10,10 @@ class CacheUseCase {
   final CacheRepository _cacheRepository;
 
   Future<Either<Failure, Cache?>> createCache({
-    required CacheDto cacheDto,
+    required Cache cache,
   }) async {
     return _cacheRepository.createCache(
-      cacheDto: cacheDto,
+      cache: cache,
     );
   }
 
@@ -29,10 +28,10 @@ class CacheUseCase {
   }
 
   Future<Either<Failure, Cache?>> updateCache({
-    required CacheDto cacheDto,
+    required Cache cache,
   }) async {
     return _cacheRepository.updateCache(
-      cacheDto: cacheDto,
+      cache: cache,
     );
   }
 
