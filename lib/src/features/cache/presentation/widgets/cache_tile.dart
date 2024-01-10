@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
@@ -34,15 +35,23 @@ class CacheTile extends StatelessWidget {
                   maxLines: 2,
                   text: TextSpan(
                     children: [
-                      TextSpan(
-                        text: cache?.link ?? '-',
-                        style: const TextStyle(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
+                      if (Validator.isValidLink(cache?.link))
+                        TextSpan(
+                          text: cache?.link ?? '-',
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => _launchURL(cache?.link),
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => _launchURL(cache?.link),
-                      ),
+                      if (!Validator.isValidLink(cache?.link))
+                        TextSpan(
+                          text: cache?.link ?? '-',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -64,7 +73,7 @@ class CacheTile extends StatelessWidget {
   }
 
   Future<void> _launchURL(String? url) async {
-    if (url == null) return;
+    if (url == null || !Validator.isValidLink(url)) return;
     final url0 = Uri.parse(url);
     if (await launchUrl(url0)) {
     } else {

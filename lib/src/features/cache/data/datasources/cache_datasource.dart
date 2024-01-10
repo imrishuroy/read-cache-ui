@@ -1,6 +1,8 @@
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/network/cache_client.dart';
-import 'package:read_cache_ui/src/features/cache/data/data.dart';
+import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
+@lazySingleton
 class CacheDataSource {
   CacheDataSource({
     required CacheClient cacheClient,
@@ -8,19 +10,19 @@ class CacheDataSource {
 
   final CacheClient _cacheClient;
 
-  Future<CacheDto?> createCache({
-    required CacheDto cacheDto,
+  Future<Cache?> createCache({
+    required Cache cache,
   }) async {
     try {
       return _cacheClient.createCache(
-        cacheDto,
+        cache,
       );
     } catch (_) {
       rethrow;
     }
   }
 
-  Future<List<CacheDto?>> listCaches({
+  Future<List<Cache?>> listCaches({
     required int pageSize,
     required int pageId,
   }) async {
@@ -34,12 +36,12 @@ class CacheDataSource {
     }
   }
 
-  Future<CacheDto?> updateCache({
-    required CacheDto cacheDto,
+  Future<Cache?> updateCache({
+    required Cache cache,
   }) async {
     try {
       return _cacheClient.updateCache(
-        cacheDto,
+        cache,
       );
     } catch (_) {
       rethrow;

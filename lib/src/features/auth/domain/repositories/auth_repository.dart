@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
-import 'package:read_cache_ui/src/features/auth/data/data.dart';
+import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
+
 
 abstract class AuthRepository {
   Future<Either<Failure, UserCredential?>> signUp({
@@ -9,8 +10,8 @@ abstract class AuthRepository {
     required String password,
   });
 
-  Future<Either<Failure, AppUserDto?>> createUser({
-    required CreateUserReqDto createUserReqDto,
+  Future<Either<Failure, AppUser>> createUser({
+    required AppUser appUser,
   });
 
   Future<Either<Failure, UserCredential?>> signIn({
@@ -18,7 +19,7 @@ abstract class AuthRepository {
     required String password,
   });
 
-  Future<Either<Failure, AppUserDto?>> getUser({
+  Future<Either<Failure, AppUser>> getUser({
     required String? id,
   });
 

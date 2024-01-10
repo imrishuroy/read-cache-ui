@@ -4,14 +4,15 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/core/config/shared_prefs.dart';
-import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
+@lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required AuthUseCase authUseCase,
@@ -79,9 +80,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (user) async {
           await SharedPrefs.setAppUser(
             appUser: AppUser(
-              id: user?.id,
-              email: user?.email,
-              name: user?.name,
+              id: user.id,
+              email: user.email,
+              name: user.name,
             ),
           );
           emit(
@@ -147,7 +148,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ),
     );
     final response = await _authUseCase.createUser(
-      createUserReqDto: CreateUserReqDto(
+      appUser: AppUser(
         email: event.email,
         name: event.name,
       ),
@@ -165,9 +166,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (user) async {
         await SharedPrefs.setAppUser(
           appUser: AppUser(
-            id: user?.id,
-            email: user?.email,
-            name: user?.name,
+            id: user.id,
+            email: user.email,
+            name: user.name,
           ),
         );
         emit(

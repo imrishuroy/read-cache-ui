@@ -13,7 +13,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await init();
+  configureDependencies();
   getIt<Dio>().interceptors.add(AuthInterceptor());
   await SharedPrefs.init();
   await FirebasePerformanceService.setPerformanceCollectionEnabled(

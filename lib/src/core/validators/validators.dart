@@ -39,6 +39,13 @@ class Validator {
     return null;
   }
 
+  static String? validateCacheContent(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter cache content';
+    }
+    return null;
+  }
+
   static String? validateLink(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a link';

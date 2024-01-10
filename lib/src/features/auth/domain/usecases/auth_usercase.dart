@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
-import 'package:read_cache_ui/src/features/auth/data/data.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 
+@lazySingleton
 class AuthUseCase {
   AuthUseCase({
     required AuthRepository authRepository,
@@ -21,11 +22,11 @@ class AuthUseCase {
     );
   }
 
-  Future<Either<Failure, AppUserDto?>> createUser({
-    required CreateUserReqDto createUserReqDto,
+  Future<Either<Failure, AppUser>> createUser({
+    required AppUser appUser,
   }) async {
     return _authRepository.createUser(
-      createUserReqDto: createUserReqDto,
+      appUser: appUser,
     );
   }
 
@@ -39,7 +40,7 @@ class AuthUseCase {
     );
   }
 
-  Future<Either<Failure, AppUserDto?>> getUser({
+  Future<Either<Failure, AppUser>> getUser({
     required String? id,
   }) async {
     return _authRepository.getUser(
