@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:read_cache_ui/src/core/network/cache_client.dart';
-import 'package:read_cache_ui/src/features/auth/data/data.dart';
+import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 
 class AuthDataSource {
   AuthDataSource({
@@ -52,19 +52,19 @@ class AuthDataSource {
     return null;
   }
 
-  Future<AppUserDto?> createUser({
-    required CreateUserReqDto createUserReqDto,
+  Future<AppUser> createUser({
+    required AppUser appUser,
   }) async {
     try {
       return await _readCacheClient.createUser(
-        createUserReqDto,
+        appUser,
       );
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<AppUserDto?> getUser({
+  Future<AppUser> getUser({
     required String? id,
   }) async {
     try {

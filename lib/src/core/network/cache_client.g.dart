@@ -45,14 +45,14 @@ class _CacheClient implements CacheClient {
   }
 
   @override
-  Future<AppUserDto?> getUser(String? id) async {
+  Future<AppUser> getUser(String? id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>?>(_setStreamType<AppUserDto>(Options(
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<AppUser>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -68,20 +68,18 @@ class _CacheClient implements CacheClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value =
-        _result.data == null ? null : AppUserDto.fromJson(_result.data!);
+    final value = AppUser.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<AppUserDto?> createUser(CreateUserReqDto createUserReqDto) async {
+  Future<AppUser> createUser(AppUser createUserReqDto) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(createUserReqDto.toJson());
-    final _result = await _dio
-        .fetch<Map<String, dynamic>?>(_setStreamType<AppUserDto>(Options(
+    final _data = createUserReqDto;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<AppUser>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -97,8 +95,7 @@ class _CacheClient implements CacheClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value =
-        _result.data == null ? null : AppUserDto.fromJson(_result.data!);
+    final value = AppUser.fromJson(_result.data!);
     return value;
   }
 

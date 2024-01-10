@@ -33,12 +33,12 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AppUserDto?>> createUser({
-    required CreateUserReqDto createUserReqDto,
+  Future<Either<Failure, AppUser>> createUser({
+    required AppUser appUser,
   }) async {
     try {
       final response = await _authDataSource.createUser(
-        createUserReqDto: createUserReqDto,
+        appUser: appUser,
       );
       return Right(response);
     } on DioException catch (error) {
@@ -72,7 +72,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AppUserDto?>> getUser({
+  Future<Either<Failure, AppUser>> getUser({
     required String? id,
   }) async {
     try {
