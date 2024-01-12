@@ -7,8 +7,6 @@ analyzer:
     - "**/*.freezed.dart"
     - "**/*.g.dart"
     - "**/*.config.dart"
-    - "lib/src/features/languages/translations/keys.dart"
-    - "lib/src/features/languages/translations/values/**.dart"
 
 
   errors:

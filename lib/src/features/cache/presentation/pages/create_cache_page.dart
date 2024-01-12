@@ -5,12 +5,14 @@ import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class CreateCachePage extends StatefulWidget {
   const CreateCachePage({
     super.key,
   });
 
+  static const name = 'CreateCachePage';
   @override
   State<CreateCachePage> createState() => _CreateCachePageState();
 }
@@ -19,6 +21,12 @@ class _CreateCachePageState extends State<CreateCachePage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _linkController = TextEditingController();
+
+  @override
+  void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(CreateCachePage.name);
+    super.initState();
+  }
 
   final _cacheBloc = getIt<CacheBloc>();
   @override
@@ -38,7 +46,7 @@ class _CreateCachePageState extends State<CreateCachePage> {
                 content: Text('Cache Created'),
               ),
             );
-            context.go('/caches');
+            context.goNamed(CachesListPage.name);
           }
           if (state.status == CacheStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(

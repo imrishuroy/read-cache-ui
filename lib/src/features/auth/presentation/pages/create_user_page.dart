@@ -5,12 +5,15 @@ import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/cache/presentation/pages/caches_list_page.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class CreateUserPage extends StatefulWidget {
   const CreateUserPage({
     required this.email,
     super.key,
   });
+  static const name = 'CreateUserPage';
 
   final String? email;
 
@@ -26,6 +29,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
   @override
   void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(CreateUserPage.name);
     if (widget.email != null) {
       _emailController.text = widget.email!;
     }
@@ -39,12 +43,12 @@ class _CreateUserPageState extends State<CreateUserPage> {
         bloc: _authBloc,
         listener: (context, state) {
           if (state.userStatus == UserStatus.authorized) {
-            context.go('/caches');
+            context.goNamed(CachesListPage.name);
           }
           if (state.authStatus == AuthStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Failure: ${state.failure?.message}'),
+                content: Text('${state.failure?.message}'),
               ),
             );
           }
@@ -104,7 +108,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                             ),
                             const SizedBox(height: 20),
                             TextButton(
-                              onPressed: () => context.go('/signin'),
+                              onPressed: () => context.goNamed(SignInPage.name),
                               child: const Text('Go back'),
                             ),
                           ],

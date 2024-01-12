@@ -7,13 +7,14 @@ import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class UpdateCachePage extends StatefulWidget {
   const UpdateCachePage({
     required this.cache,
     super.key,
   });
-
+  static const name = 'UpdateCachePage';
   final Cache? cache;
 
   @override
@@ -30,6 +31,7 @@ class _UpdateCachePageState extends State<UpdateCachePage> {
 
   @override
   void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(UpdateCachePage.name);
     _starTime = DateTime.now();
     _titleController.text = widget.cache?.title ?? '';
     _linkController.text = widget.cache?.link ?? '';
@@ -62,7 +64,7 @@ class _UpdateCachePageState extends State<UpdateCachePage> {
                 content: Text('Cache Updated'),
               ),
             );
-            context.go('/caches');
+            context.goNamed(CachesListPage.name);
           }
           if (state.status == CacheStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(

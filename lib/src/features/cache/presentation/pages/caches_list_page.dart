@@ -6,9 +6,12 @@ import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/network/firebase_performance_service.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class CachesListPage extends StatefulWidget {
   const CachesListPage({super.key});
+
+  static const name = 'CachesListPage';
 
   @override
   State<CachesListPage> createState() => _CachesListPageState();
@@ -23,6 +26,7 @@ class _CachesListPageState extends State<CachesListPage> {
 
   @override
   void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(CachesListPage.name);
     _starTime = DateTime.now();
     _cacheBloc.add(
       CacheListLoaded(),
@@ -37,6 +41,7 @@ class _CachesListPageState extends State<CachesListPage> {
         value: difference.inMilliseconds,
       );
     });
+
     super.initState();
   }
 
@@ -44,8 +49,8 @@ class _CachesListPageState extends State<CachesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go(
-          '/create-cache',
+        onPressed: () => context.goNamed(
+          CreateCachePage.name,
         ),
         child: const Icon(Icons.add),
       ),
@@ -57,7 +62,7 @@ class _CachesListPageState extends State<CachesListPage> {
           IconButton(
             onPressed: () {
               _authBloc.add(AuthSignOutRequested());
-              context.go('/signin');
+              context.goNamed(SignInPage.name);
             },
             icon: const Icon(Icons.logout),
           ),
