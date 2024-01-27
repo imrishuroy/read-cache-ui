@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:read_cache_ui/src/core/config/shared_prefs.dart';
+import 'package:read_cache_ui/src/core/widgets/root_layout.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/profile/profile_page.dart';
+import 'package:read_cache_ui/src/features/public_caches/public_caches_page.dart';
 import 'package:read_cache_ui/src/features/splash/splash_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'parent');
+const _scaffoldKey = ValueKey('_scaffoldKey');
 
 class AppRouter {
   GoRouter router = GoRouter(
@@ -47,14 +51,38 @@ class AppRouter {
           ),
         ),
       ),
+      // GoRoute(
+      //   path: '/caches',
+      //   name: CachesListPage.name,
+      //   parentNavigatorKey: _rootNavigatorKey,
+      //   pageBuilder: (context, state) => const MaterialPage(
+      //     child: CachesListPage(),
+      //   ),
+      // ),
+
       GoRoute(
         path: '/caches',
         name: CachesListPage.name,
-        parentNavigatorKey: _rootNavigatorKey,
-        pageBuilder: (context, state) => const MaterialPage(
-          child: CachesListPage(),
-        ),
+        pageBuilder: (BuildContext context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const RootLayout(
+              key: _scaffoldKey,
+              currentIndex: 0,
+              child: CachesListPage(),
+            ),
+            transitionDuration: const Duration(milliseconds: 150),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
       ),
+
       GoRoute(
         path: '/cache/:id',
         name: CacheDetailsPage.name,
@@ -82,6 +110,52 @@ class AppRouter {
             cache: state.extra as Cache?,
           ),
         ),
+      ),
+
+      GoRoute(
+        path: '/public-caches',
+        name: PublicCachesPage.name,
+        pageBuilder: (BuildContext context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const RootLayout(
+              key: _scaffoldKey,
+              currentIndex: 1,
+              child: PublicCachesPage(),
+            ),
+            transitionDuration: const Duration(milliseconds: 150),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/profile',
+        name: ProfilePage.name,
+        pageBuilder: (BuildContext context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const RootLayout(
+              key: _scaffoldKey,
+              currentIndex: 2,
+              child: ProfilePage(),
+            ),
+            transitionDuration: const Duration(milliseconds: 150),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
       ),
     ],
     errorPageBuilder: (context, state) => const MaterialPage(
