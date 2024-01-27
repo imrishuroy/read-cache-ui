@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
+import 'package:read_cache_ui/src/core/config/success.dart';
 import 'package:read_cache_ui/src/features/cache/data/data.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
@@ -81,6 +82,25 @@ class CacheRepositoryImpl extends CacheRepository {
           id: id,
         ),
       );
+    } on DioException catch (error) {
+      return Left(
+        Failure(
+          statusCode: error.response?.statusCode,
+          message: error.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success?>> deleteCacheTags({
+    required int cacheId,
+  }) async {
+    try {
+      final result = await _cacheDataSource.deleteCacheTags(
+        cacheId: cacheId,
+      );
+      return Right(result);
     } on DioException catch (error) {
       return Left(
         Failure(

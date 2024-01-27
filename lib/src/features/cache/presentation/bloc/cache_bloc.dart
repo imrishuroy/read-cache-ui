@@ -1,9 +1,9 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
+import 'package:read_cache_ui/src/features/tag/presentation/bloc/tag_bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'cache_event.dart';
@@ -16,11 +16,13 @@ EventTransformer<E> _throttleDroppable<E>(Duration duration) {
   };
 }
 
-@injectable
+// @injectable
 class CacheBloc extends Bloc<CacheEvent, CacheState> {
   CacheBloc({
     required CacheUseCase cacheUseCase,
-  })  : _cacheUseCase = cacheUseCase,
+    required TagBloc tagBloc,
+  })  : _tagBloc = tagBloc,
+        _cacheUseCase = cacheUseCase,
         super(CacheState.initial()) {
     on<CacheListLoaded>(
       _onCacheListLoaded,
@@ -32,6 +34,8 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     on<CacheUpdated>(_onCacheUpdated);
     on<CacheDeleted>(_onCacheDeleted);
   }
+
+  final TagBloc _tagBloc;
   final CacheUseCase _cacheUseCase;
 
   Future<void> _onCacheListLoaded(
@@ -128,7 +132,7 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     final response = await _cacheUseCase.createCache(
       cache: Cache(
         title: event.title,
-        link: event.link,
+        content: event.content,
       ),
     );
     response.fold(
@@ -141,6 +145,15 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
         );
       },
       (cache) {
+        if (cache?.id == null) return;
+
+        _tagBloc.add(
+          CacheAddedTags(
+            cacheId: cache!.id!,
+            tags: event.tags,
+          ),
+        );
+
         emit(
           state.copyWith(
             // cacheList: [
@@ -170,18 +183,28 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
       cache: Cache(
         id: cache.id,
         title: cache.title,
-        link: cache.link,
+        content: cache.content,
       ),
     );
 
-    response.fold((failure) {
+    await response.fold((failure) {
       emit(
         state.copyWith(
           failure: failure,
           status: CacheStatus.failure,
         ),
       );
-    }, (cache) {
+    }, (cache) async {
+      if (cache?.id == null) return;
+
+      await _cacheUseCase.deleteCacheTags(cacheId: cache!.id!);
+
+      _tagBloc.add(
+        CacheAddedTags(
+          cacheId: cache.id!,
+          tags: event.tags,
+        ),
+      );
       emit(
         state.copyWith(
           status: CacheStatus.success,

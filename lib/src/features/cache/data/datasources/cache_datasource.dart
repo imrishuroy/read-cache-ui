@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:read_cache_ui/src/core/config/success.dart';
 import 'package:read_cache_ui/src/core/network/cache_client.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
@@ -54,6 +55,18 @@ class CacheDataSource {
     try {
       return _cacheClient.deleteCache(
         id,
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<Success?> deleteCacheTags({
+    required int cacheId,
+  }) async {
+    try {
+      return await _cacheClient.deleteCacheTags(
+        cacheId,
       );
     } catch (_) {
       rethrow;

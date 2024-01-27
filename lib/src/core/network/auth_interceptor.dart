@@ -9,7 +9,7 @@ class AuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final token = SharedPrefs.getToken();
-    //  debugPrint('token from inceptor $token');
+    debugPrint('token from inceptor $token');
     if (token != null) {
       options.headers.addAll(
         {

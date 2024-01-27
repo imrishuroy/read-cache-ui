@@ -88,97 +88,97 @@ class _CachesListPageState extends State<CachesListPage> {
           }
         },
         builder: (context, state) {
-          if (state.status == CacheStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+          if (state.status == CacheStatus.success) {
+            final cacheList = state.cacheList;
+            if (cacheList.isEmpty) {
+              return const Center(
+                child: Text('No Cache Found'),
+              );
+            }
 
-          final cacheList = state.cacheList;
-          if (cacheList.isEmpty) {
-            return const Center(
-              child: Text('No Cache Found'),
-            );
-          }
-
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 20,
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: AnimationLimiter(
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      itemCount: state.hasReachedMax
-                          ? cacheList.length
-                          : cacheList.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index >= cacheList.length) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 8,
-                            ),
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 20,
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: AnimationLimiter(
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        itemCount: state.hasReachedMax
+                            ? cacheList.length
+                            : cacheList.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index >= cacheList.length) {
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8,
                               ),
-                            ),
-                          );
-                        }
-                        final cache = cacheList[index];
-                        return Dismissible(
-                          key: Key('${cache?.id}'),
-                          onDismissed: (direction) {
-                            if (direction == DismissDirection.endToStart) {
-                              if (cache?.id != null) {
-                                _cacheBloc.add(
-                                  CacheDeleted(
-                                    id: cache!.id!,
-                                  ),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            );
+                          }
+                          final cache = cacheList[index];
+                          return Dismissible(
+                            key: Key('${cache?.id}'),
+                            onDismissed: (direction) {
+                              if (direction == DismissDirection.endToStart) {
+                                if (cache?.id != null) {
+                                  _cacheBloc.add(
+                                    CacheDeleted(
+                                      id: cache!.id!,
+                                    ),
+                                  );
+                                }
+                              } else {
+                                context.goNamed(
+                                  UpdateCachePage.name,
+                                  pathParameters: {'id': '${cache?.id}'},
+                                  extra: cache,
                                 );
                               }
-                            } else {
-                              context.go(
-                                '/update-cache',
-                                extra: cache,
-                              );
-                            }
-                          },
-                          background: const ColoredBox(
-                            color: Colors.green,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 16),
-                                child: Icon(Icons.edit),
+                            },
+                            background: const ColoredBox(
+                              color: Colors.green,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 16),
+                                  child: Icon(Icons.edit),
+                                ),
                               ),
                             ),
-                          ),
-                          secondaryBackground: ColoredBox(
-                            color: Colors.red.shade500,
-                            child: const Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 16),
-                                child: Icon(Icons.delete),
+                            secondaryBackground: ColoredBox(
+                              color: Colors.red.shade500,
+                              child: const Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 16),
+                                  child: Icon(Icons.delete),
+                                ),
                               ),
                             ),
-                          ),
-                          child: CacheTile(
-                            cache: cache,
-                            index: index,
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => const Divider(),
+                            child: CacheTile(
+                              cache: cache,
+                              index: index,
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Divider(),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),

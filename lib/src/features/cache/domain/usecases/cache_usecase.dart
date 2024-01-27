@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
+import 'package:read_cache_ui/src/core/config/success.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 
 @lazySingleton
@@ -42,6 +43,14 @@ class CacheUseCase {
   }) async {
     return _cacheRepository.deleteCache(
       id: id,
+    );
+  }
+
+  Future<Either<Failure, Success?>> deleteCacheTags({
+    required int cacheId,
+  }) async {
+    return _cacheRepository.deleteCacheTags(
+      cacheId: cacheId,
     );
   }
 }

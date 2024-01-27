@@ -5,6 +5,7 @@ import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/tag/presentation/presentation.dart';
 import 'package:read_cache_ui/src/services/services.dart';
 
 class CreateCachePage extends StatefulWidget {
@@ -18,17 +19,19 @@ class CreateCachePage extends StatefulWidget {
 }
 
 class _CreateCachePageState extends State<CreateCachePage> {
-  final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _linkController = TextEditingController();
-
   @override
   void initState() {
     FirebaseAnalyticsService.logScreenViewEvent(CreateCachePage.name);
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final _contentController = TextEditingController();
+
   final _cacheBloc = getIt<CacheBloc>();
+  final _tagBloc = getIt<TagBloc>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +49,7 @@ class _CreateCachePageState extends State<CreateCachePage> {
                 content: Text('Cache Created'),
               ),
             );
+
             context.goNamed(CachesListPage.name);
           }
           if (state.status == CacheStatus.failure) {
@@ -69,35 +73,42 @@ class _CreateCachePageState extends State<CreateCachePage> {
             ),
             child: Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomTextField(
-                    textEditingController: _titleController,
-                    hintText: 'Cache Title',
-                    validator: (value) => Validator.validateCacheTitle(value),
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  CustomTextField(
-                    textEditingController: _linkController,
-                    hintText: 'Cache Content',
-                    validator: (value) => Validator.validateCacheContent(value),
-                    // isLinkField: Validator.isValidLink(_linkController.text),
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(380, 55),
-                      backgroundColor: Colors.blue,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
-                    onPressed: _addCache,
-                    child: const Text('Create Cache'),
-                  ),
-                ],
+                    CustomTextField(
+                      textEditingController: _titleController,
+                      hintText: 'Cache Title',
+                      validator: (value) => Validator.validateCacheTitle(value),
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    CustomTextField(
+                      textEditingController: _contentController,
+                      hintText: 'Cache Content',
+                      validator: (value) =>
+                          Validator.validateCacheContent(value),
+                    ),
+                    const SizedBox(height: 28),
+                    Tags(
+                      tagBloc: _tagBloc,
+                    ),
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(380, 55),
+                        backgroundColor: Colors.blue,
+                      ),
+                      onPressed: _addCache,
+                      child: const Text('Create Cache'),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           );
@@ -108,10 +119,19 @@ class _CreateCachePageState extends State<CreateCachePage> {
 
   void _addCache() {
     if (_formKey.currentState!.validate()) {
+      debugPrint('tag selected: ${_tagBloc.state.selectedTags}');
+
+      CacheCreated(
+        title: _titleController.text,
+        content: _contentController.text,
+        tags: _tagBloc.state.selectedTags.keys.toList(),
+      );
+
       _cacheBloc.add(
         CacheCreated(
           title: _titleController.text,
-          link: _linkController.text,
+          content: _contentController.text,
+          tags: _tagBloc.state.selectedTags.keys.toList(),
         ),
       );
     }
@@ -120,7 +140,7 @@ class _CreateCachePageState extends State<CreateCachePage> {
   @override
   void dispose() {
     _titleController.dispose();
-    _linkController.dispose();
+    _contentController.dispose();
     super.dispose();
   }
 }

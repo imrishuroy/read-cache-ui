@@ -56,6 +56,16 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: '/cache/:id',
+        name: CacheDetailsPage.name,
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) => MaterialPage(
+          child: CacheDetailsPage(
+            cache: state.extra as Cache?,
+          ),
+        ),
+      ),
+      GoRoute(
         path: '/create-cache',
         name: CreateCachePage.name,
         parentNavigatorKey: _rootNavigatorKey,
@@ -64,7 +74,7 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/update-cache',
+        path: '/update-cache/:id',
         name: UpdateCachePage.name,
         parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => MaterialPage(
