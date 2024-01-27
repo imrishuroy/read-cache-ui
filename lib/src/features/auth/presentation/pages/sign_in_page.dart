@@ -5,9 +5,12 @@ import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/cache/presentation/pages/caches_list_page.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
+  static const name = 'SignInPage';
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -18,8 +21,10 @@ class _SignInPageState extends State<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authBloc = getIt<AuthBloc>();
+
   @override
   void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(SignInPage.name);
     super.initState();
   }
 
@@ -31,12 +36,13 @@ class _SignInPageState extends State<SignInPage> {
         listener: (context, state) {
           if (state.authStatus == AuthStatus.signedIn &&
               state.userStatus == UserStatus.authorized) {
-            context.go('/caches');
+            context.goNamed(CachesListPage.name);
           }
           if (state.authStatus == AuthStatus.signedIn &&
               state.userStatus == UserStatus.unAuthorized) {
-            context.go(
-              '/create-user/${_emailController.text}',
+            context.goNamed(
+              CreateUserPage.name,
+              pathParameters: {'email': _emailController.text},
             );
           }
           if (state.authStatus == AuthStatus.failure) {
@@ -101,8 +107,8 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                             const SizedBox(height: 20),
                             TextButton(
-                              onPressed: () => context.go('/signup'),
-                              child: const Text('Create an account'),
+                              onPressed: () => context.goNamed(SignUpPage.name),
+                              child: const Text('Sign Up'),
                             ),
                           ],
                         ),

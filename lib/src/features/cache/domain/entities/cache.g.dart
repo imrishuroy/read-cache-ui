@@ -8,7 +8,7 @@ part of 'cache.dart';
 
 _$CacheImpl _$$CacheImplFromJson(Map<String, dynamic> json) => _$CacheImpl(
       title: json['title'] as String,
-      link: json['link'] as String,
+      content: json['content'] as String,
       id: json['id'] as int?,
       owner: json['owner'] as String?,
       createdAt: _$JsonConverterFromJson<String, DateTime?>(
@@ -18,7 +18,7 @@ _$CacheImpl _$$CacheImplFromJson(Map<String, dynamic> json) => _$CacheImpl(
 Map<String, dynamic> _$$CacheImplToJson(_$CacheImpl instance) {
   final val = <String, dynamic>{
     'title': instance.title,
-    'link': instance.link,
+    'content': instance.content,
   };
 
   void writeNotNull(String key, dynamic value) {

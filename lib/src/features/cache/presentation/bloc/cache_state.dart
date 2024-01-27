@@ -33,6 +33,7 @@ class CacheState extends Equatable {
   final CacheStatus status;
   final CacheActionStatus actionStatus;
   final List<Cache?> cacheList;
+
   final int pageId;
   final bool hasReachedMax;
   final Failure? failure;

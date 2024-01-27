@@ -11,10 +11,12 @@ class AuthInterceptor extends Interceptor {
     final token = SharedPrefs.getToken();
     debugPrint('token from inceptor $token');
     if (token != null) {
-      options.headers.addAll({
-        'content-type': 'application/json',
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      });
+      options.headers.addAll(
+        {
+          'content-type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer $token',
+        },
+      );
     }
     super.onRequest(options, handler);
   }

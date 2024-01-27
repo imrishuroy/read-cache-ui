@@ -8,7 +8,7 @@ part 'cache.g.dart';
 class Cache with _$Cache {
   const factory Cache({
     required String title,
-    required String link,
+    required String content,
     @JsonKey(includeIfNull: false) int? id,
     @JsonKey(includeToJson: false) String? owner,
     @DateTimeConverter()

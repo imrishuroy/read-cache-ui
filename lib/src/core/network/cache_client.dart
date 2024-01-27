@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:read_cache_ui/src/core/config/success.dart';
 import 'package:read_cache_ui/src/features/auth/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
+import 'package:read_cache_ui/src/features/tag/data/data.dart';
+import 'package:read_cache_ui/src/features/tag/domain/domain.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'cache_client.g.dart';
@@ -37,4 +40,24 @@ abstract class CacheClient {
 
   @DELETE('/caches/{id}')
   Future<void> deleteCache(@Path('id') int id);
+
+  @GET('/tags')
+  Future<List<Tag?>> listTags();
+
+  @POST('/tags')
+  Future<Tag?> createTag(@Body() Tag tag);
+
+  @POST('/caches/{cache_id}/add-tag')
+  Future<Success?> addTagToCache(
+    @Path('cache_id') int cacheId,
+    @Body() CacheAddTagsReq cacheAddTagsReq,
+  );
+
+  @GET('/caches/{cache_id}/tags')
+  Future<List<Tag?>> listTagsByCacheId(@Path('cache_id') int cacheId);
+
+  @DELETE('/caches/{cache_id}/tags')
+  Future<Success?> deleteCacheTags(
+    @Path('cache_id') int cacheId,
+  );
 }

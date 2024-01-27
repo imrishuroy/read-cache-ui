@@ -12,22 +12,29 @@ class CacheListLoaded extends CacheEvent {}
 class CacheCreated extends CacheEvent {
   const CacheCreated({
     required this.title,
-    required this.link,
+    required this.content,
+    required this.tags,
   });
 
   final String title;
-  final String link;
+  final String content;
+  final List<int?> tags;
 
   @override
-  List<Object> get props => [title, link];
+  List<Object> get props => [title, content, tags];
 }
 
 class CacheUpdated extends CacheEvent {
   const CacheUpdated({
     required this.cache,
+    required this.tags,
   });
 
   final Cache cache;
+  final List<int?> tags;
+
+  @override
+  List<Object> get props => [cache, tags];
 }
 
 class CacheDeleted extends CacheEvent {

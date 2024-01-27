@@ -21,7 +21,7 @@ Cache _$CacheFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Cache {
   String get title => throw _privateConstructorUsedError;
-  String get link => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
   int? get id => throw _privateConstructorUsedError;
   @JsonKey(includeToJson: false)
@@ -42,7 +42,7 @@ abstract class $CacheCopyWith<$Res> {
   @useResult
   $Res call(
       {String title,
-      String link,
+      String content,
       @JsonKey(includeIfNull: false) int? id,
       @JsonKey(includeToJson: false) String? owner,
       @DateTimeConverter()
@@ -64,7 +64,7 @@ class _$CacheCopyWithImpl<$Res, $Val extends Cache>
   @override
   $Res call({
     Object? title = null,
-    Object? link = null,
+    Object? content = null,
     Object? id = freezed,
     Object? owner = freezed,
     Object? createdAt = freezed,
@@ -74,9 +74,9 @@ class _$CacheCopyWithImpl<$Res, $Val extends Cache>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      link: null == link
-          ? _value.link
-          : link // ignore: cast_nullable_to_non_nullable
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
       id: freezed == id
           ? _value.id
@@ -103,7 +103,7 @@ abstract class _$$CacheImplCopyWith<$Res> implements $CacheCopyWith<$Res> {
   @useResult
   $Res call(
       {String title,
-      String link,
+      String content,
       @JsonKey(includeIfNull: false) int? id,
       @JsonKey(includeToJson: false) String? owner,
       @DateTimeConverter()
@@ -123,7 +123,7 @@ class __$$CacheImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = null,
-    Object? link = null,
+    Object? content = null,
     Object? id = freezed,
     Object? owner = freezed,
     Object? createdAt = freezed,
@@ -133,9 +133,9 @@ class __$$CacheImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      link: null == link
-          ? _value.link
-          : link // ignore: cast_nullable_to_non_nullable
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
       id: freezed == id
           ? _value.id
@@ -158,7 +158,7 @@ class __$$CacheImplCopyWithImpl<$Res>
 class _$CacheImpl implements _Cache {
   const _$CacheImpl(
       {required this.title,
-      required this.link,
+      required this.content,
       @JsonKey(includeIfNull: false) this.id,
       @JsonKey(includeToJson: false) this.owner,
       @DateTimeConverter()
@@ -171,7 +171,7 @@ class _$CacheImpl implements _Cache {
   @override
   final String title;
   @override
-  final String link;
+  final String content;
   @override
   @JsonKey(includeIfNull: false)
   final int? id;
@@ -185,7 +185,7 @@ class _$CacheImpl implements _Cache {
 
   @override
   String toString() {
-    return 'Cache(title: $title, link: $link, id: $id, owner: $owner, createdAt: $createdAt)';
+    return 'Cache(title: $title, content: $content, id: $id, owner: $owner, createdAt: $createdAt)';
   }
 
   @override
@@ -194,7 +194,7 @@ class _$CacheImpl implements _Cache {
         (other.runtimeType == runtimeType &&
             other is _$CacheImpl &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.link, link) || other.link == link) &&
+            (identical(other.content, content) || other.content == content) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.createdAt, createdAt) ||
@@ -204,7 +204,7 @@ class _$CacheImpl implements _Cache {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, title, link, id, owner, createdAt);
+      Object.hash(runtimeType, title, content, id, owner, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -223,7 +223,7 @@ class _$CacheImpl implements _Cache {
 abstract class _Cache implements Cache {
   const factory _Cache(
       {required final String title,
-      required final String link,
+      required final String content,
       @JsonKey(includeIfNull: false) final int? id,
       @JsonKey(includeToJson: false) final String? owner,
       @DateTimeConverter()
@@ -235,7 +235,7 @@ abstract class _Cache implements Cache {
   @override
   String get title;
   @override
-  String get link;
+  String get content;
   @override
   @JsonKey(includeIfNull: false)
   int? get id;

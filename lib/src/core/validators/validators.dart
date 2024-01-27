@@ -59,6 +59,17 @@ class Validator {
     return null;
   }
 
+  static String? validateTagName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a tag name';
+    } else if (value.length < 3) {
+      return 'Tag name must be at least 3 characters long';
+    } else if (value.length > 100) {
+      return 'Tag name must be less than 100 characters';
+    }
+    return null;
+  }
+
   static bool isValidLink(String? value) {
     if (value == null || value.isEmpty) {
       return false;

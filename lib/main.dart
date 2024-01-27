@@ -7,9 +7,11 @@ import 'package:read_cache_ui/src/core/config/shared_prefs.dart';
 import 'package:read_cache_ui/src/core/network/auth_interceptor.dart';
 import 'package:read_cache_ui/src/core/network/firebase_performance_service.dart';
 import 'package:read_cache_ui/src/core/routes/app_router.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -35,9 +37,9 @@ class ReadCache extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routerConfig: appRouter.router,
-      // routeInformationParser: appRouter.router.routeInformationParser,
-      // routerDelegate: appRouter.router.routerDelegate,
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark(
+        useMaterial3: false,
+      ),
     );
   }
 }

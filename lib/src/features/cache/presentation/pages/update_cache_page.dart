@@ -7,13 +7,15 @@ import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/tag/presentation/presentation.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class UpdateCachePage extends StatefulWidget {
   const UpdateCachePage({
     required this.cache,
     super.key,
   });
-
+  static const name = 'UpdateCachePage';
   final Cache? cache;
 
   @override
@@ -23,16 +25,18 @@ class UpdateCachePage extends StatefulWidget {
 class _UpdateCachePageState extends State<UpdateCachePage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  final _linkController = TextEditingController();
+  final _contentController = TextEditingController();
   final _cacheBloc = getIt<CacheBloc>();
+  final _tagBloc = getIt<TagBloc>();
   late DateTime _starTime;
   late DateTime _endTime;
 
   @override
   void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(UpdateCachePage.name);
     _starTime = DateTime.now();
     _titleController.text = widget.cache?.title ?? '';
-    _linkController.text = widget.cache?.link ?? '';
+    _contentController.text = widget.cache?.content ?? '';
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _endTime = DateTime.now();
       final difference = _endTime.difference(_starTime);
@@ -62,7 +66,7 @@ class _UpdateCachePageState extends State<UpdateCachePage> {
                 content: Text('Cache Updated'),
               ),
             );
-            context.go('/caches');
+            context.goNamed(CachesListPage.name);
           }
           if (state.status == CacheStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -99,10 +103,15 @@ class _UpdateCachePageState extends State<UpdateCachePage> {
                     height: 32,
                   ),
                   CustomTextField(
-                    textEditingController: _linkController,
+                    textEditingController: _contentController,
                     hintText: 'Cache Content',
                     validator: (value) => Validator.validateCacheContent(value),
-                    //isLinkField: Validator.isValidLink(_linkController.text),
+                  ),
+                  const SizedBox(height: 28),
+                  Tags(
+                    tagBloc: _tagBloc,
+                    cacheId: widget.cache?.id,
+                    isFromEditCache: true,
                   ),
                   const SizedBox(height: 40),
                   ElevatedButton(
@@ -129,8 +138,9 @@ class _UpdateCachePageState extends State<UpdateCachePage> {
           cache: Cache(
             id: widget.cache?.id,
             title: _titleController.text,
-            link: _linkController.text,
+            content: _contentController.text,
           ),
+          tags: _tagBloc.state.selectedTags.keys.toList(),
         ),
       );
     }
@@ -139,7 +149,7 @@ class _UpdateCachePageState extends State<UpdateCachePage> {
   @override
   void dispose() {
     _titleController.dispose();
-    _linkController.dispose();
+    _contentController.dispose();
     super.dispose();
   }
 }

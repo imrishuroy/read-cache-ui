@@ -3,10 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:read_cache_ui/src/core/config/shared_prefs.dart';
+import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
+import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
+  static const name = 'SplashPage';
   @override
   State<SplashPage> createState() => _SplashPageState();
 }
@@ -14,18 +18,17 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(SplashPage.name);
     Future.delayed(
       const Duration(seconds: 3),
       () {
         final token = SharedPrefs.getToken();
         final appUser = SharedPrefs.getUser();
-        debugPrint(
-          'AppUser $appUser',
-        );
+
         if (token != null && appUser != null) {
-          context.go('/caches');
+          context.goNamed(CachesListPage.name);
         } else {
-          context.go('/signin');
+          context.goNamed(SignInPage.name);
         }
       },
     );

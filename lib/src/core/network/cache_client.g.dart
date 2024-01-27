@@ -210,6 +210,151 @@ class _CacheClient implements CacheClient {
         ))));
   }
 
+  @override
+  Future<List<Tag?>> listTags() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Tag>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/tags',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) =>
+            i == null ? null : Tag.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<Tag?> createTag(Tag tag) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = tag;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>?>(_setStreamType<Tag>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/tags',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data == null ? null : Tag.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<Success?> addTagToCache(
+    int cacheId,
+    CacheAddTagsReq cacheAddTagsReq,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(cacheAddTagsReq.toJson());
+    final _result =
+        await _dio.fetch<Map<String, dynamic>?>(_setStreamType<Success>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/caches/${cacheId}/add-tag',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data == null ? null : Success.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<Tag?>> listTagsByCacheId(int cacheId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Tag>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/caches/${cacheId}/tags',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) =>
+            i == null ? null : Tag.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<Success?> deleteCacheTags(int cacheId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>?>(_setStreamType<Success>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/caches/${cacheId}/tags',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data == null ? null : Success.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

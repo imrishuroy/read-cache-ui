@@ -5,9 +5,11 @@ import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
+import 'package:read_cache_ui/src/services/services.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
+  static const name = 'SignUpPage';
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -20,14 +22,21 @@ class _SignUpPageState extends State<SignUpPage> {
   final _authBloc = getIt<AuthBloc>();
 
   @override
+  void initState() {
+    FirebaseAnalyticsService.logScreenViewEvent(SignUpPage.name);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         bloc: _authBloc,
         listener: (context, state) {
           if (state.authStatus == AuthStatus.signedUp) {
-            context.go(
-              '/create-user/${_emailController.text}',
+            context.goNamed(
+              CreateUserPage.name,
+              pathParameters: {'email': _emailController.text},
             );
           }
           if (state.authStatus == AuthStatus.failure) {
