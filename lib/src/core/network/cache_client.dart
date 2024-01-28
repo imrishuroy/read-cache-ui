@@ -60,4 +60,11 @@ abstract class CacheClient {
   Future<Success?> deleteCacheTags(
     @Path('cache_id') int cacheId,
   );
+
+  @GET('/caches/public')
+  Future<List<Cache?>> listPublicCaches(
+    @Query('page_size') int pageSize,
+    @Query('page_id') int pageId,
+    @Query('tag_ids') List<int> tagIds,
+  );
 }

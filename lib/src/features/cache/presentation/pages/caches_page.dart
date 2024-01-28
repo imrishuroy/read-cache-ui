@@ -8,16 +8,16 @@ import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
 import 'package:read_cache_ui/src/services/services.dart';
 
-class CachesListPage extends StatefulWidget {
-  const CachesListPage({super.key});
+class CachesPage extends StatefulWidget {
+  const CachesPage({super.key});
 
-  static const name = 'CachesListPage';
+  static const name = 'CachesPage';
 
   @override
-  State<CachesListPage> createState() => _CachesListPageState();
+  State<CachesPage> createState() => _CachesPageState();
 }
 
-class _CachesListPageState extends State<CachesListPage> {
+class _CachesPageState extends State<CachesPage> {
   final _authBloc = getIt<AuthBloc>();
   final _cacheBloc = getIt<CacheBloc>();
   final _scrollController = ScrollController();
@@ -26,7 +26,7 @@ class _CachesListPageState extends State<CachesListPage> {
 
   @override
   void initState() {
-    FirebaseAnalyticsService.logScreenViewEvent(CachesListPage.name);
+    FirebaseAnalyticsService.logScreenViewEvent(CachesPage.name);
     _starTime = DateTime.now();
     _cacheBloc.add(
       CacheListLoaded(),
@@ -49,6 +49,7 @@ class _CachesListPageState extends State<CachesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
         onPressed: () => context.goNamed(
           CreateCachePage.name,
         ),

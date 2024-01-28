@@ -21,6 +21,7 @@ class CacheState extends Equatable {
     required this.cacheList,
     this.pageId = 1,
     this.hasReachedMax = false,
+    this.updateCache,
     this.failure,
   });
 
@@ -33,9 +34,9 @@ class CacheState extends Equatable {
   final CacheStatus status;
   final CacheActionStatus actionStatus;
   final List<Cache?> cacheList;
-
   final int pageId;
   final bool hasReachedMax;
+  final Cache? updateCache;
   final Failure? failure;
 
   CacheState copyWith({
@@ -44,6 +45,7 @@ class CacheState extends Equatable {
     List<Cache?>? cacheList,
     int? pageId,
     bool? hasReachedMax,
+    Cache? updateCache,
     Failure? failure,
   }) {
     return CacheState(
@@ -52,6 +54,7 @@ class CacheState extends Equatable {
       cacheList: cacheList ?? this.cacheList,
       pageId: pageId ?? this.pageId,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      updateCache: updateCache ?? this.updateCache,
       failure: failure ?? this.failure,
     );
   }
@@ -66,6 +69,7 @@ class CacheState extends Equatable {
         cacheList,
         pageId,
         hasReachedMax,
+        updateCache,
         failure,
       ];
 }

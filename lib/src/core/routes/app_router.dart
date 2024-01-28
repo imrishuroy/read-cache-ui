@@ -6,7 +6,7 @@ import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/profile/profile_page.dart';
-import 'package:read_cache_ui/src/features/public_caches/public_caches_page.dart';
+import 'package:read_cache_ui/src/features/public_cache/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/splash/splash_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'parent');
@@ -62,14 +62,14 @@ class AppRouter {
 
       GoRoute(
         path: '/caches',
-        name: CachesListPage.name,
+        name: CachesPage.name,
         pageBuilder: (BuildContext context, state) {
           return CustomTransitionPage(
             key: state.pageKey,
             child: const RootLayout(
               key: _scaffoldKey,
               currentIndex: 0,
-              child: CachesListPage(),
+              child: CachesPage(),
             ),
             transitionDuration: const Duration(milliseconds: 150),
             transitionsBuilder:

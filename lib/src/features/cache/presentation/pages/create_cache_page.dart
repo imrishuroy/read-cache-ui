@@ -1,9 +1,11 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
+import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/cache/presentation/presentation.dart';
 import 'package:read_cache_ui/src/features/tag/presentation/presentation.dart';
 import 'package:read_cache_ui/src/services/services.dart';
@@ -41,7 +43,15 @@ class _CreateCachePageState extends State<CreateCachePage> {
         elevation: 0,
       ),
       body: BlocConsumer<CacheBloc, CacheState>(
-        bloc: _cacheBloc,
+        bloc: _cacheBloc
+          ..add(
+            const UpdateCacheInitialized(
+              cache: Cache(
+                title: '',
+                content: '',
+              ),
+            ),
+          ),
         listener: (context, state) {
           if (state.status == CacheStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -50,7 +60,7 @@ class _CreateCachePageState extends State<CreateCachePage> {
               ),
             );
 
-            context.goNamed(CachesListPage.name);
+            context.goNamed(CachesPage.name);
           }
           if (state.status == CacheStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -75,6 +85,7 @@ class _CreateCachePageState extends State<CreateCachePage> {
               key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
                       height: 20,
@@ -94,17 +105,61 @@ class _CreateCachePageState extends State<CreateCachePage> {
                           Validator.validateCacheContent(value),
                     ),
                     const SizedBox(height: 28),
+                    AnimatedToggleSwitch<bool>.dual(
+                      current: state.updateCache?.isPublic ?? false,
+                      first: false,
+                      second: true,
+                      spacing: 52,
+                      style: const ToggleStyle(
+                        borderColor: Colors.transparent,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: Offset(0, 1.5),
+                          ),
+                        ],
+                      ),
+                      borderWidth: 4,
+                      height: 48,
+                      onChanged: (value) {
+                        _cacheBloc.add(
+                          CachePublicToggled(),
+                        );
+                      },
+                      styleBuilder: (b) => ToggleStyle(
+                        indicatorColor: b ? Colors.blue : Colors.green,
+                      ),
+                      iconBuilder: (value) => value
+                          ? const Icon(
+                              Icons.public_rounded,
+                              size: 20,
+                            )
+                          : const Icon(
+                              Icons.lock_rounded,
+                              size: 20,
+                            ),
+                      textBuilder: (value) => value
+                          ? const Center(child: Text('Public'))
+                          : const Center(child: Text('Private')),
+                    ),
+                    const SizedBox(height: 28),
                     Tags(
                       tagBloc: _tagBloc,
                     ),
-                    const SizedBox(height: 40),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(380, 55),
-                        backgroundColor: Colors.blue,
+                    const SizedBox(height: 62),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: const Size(380, 55),
+                          backgroundColor: Colors.blue,
+                        ),
+                        onPressed: () => _addCache(
+                          isPublic: state.updateCache?.isPublic ?? false,
+                        ),
+                        child: const Text('Create Cache'),
                       ),
-                      onPressed: _addCache,
-                      child: const Text('Create Cache'),
                     ),
                     const SizedBox(height: 20),
                   ],
@@ -117,20 +172,17 @@ class _CreateCachePageState extends State<CreateCachePage> {
     );
   }
 
-  void _addCache() {
+  void _addCache({required bool isPublic}) {
     if (_formKey.currentState!.validate()) {
-      debugPrint('tag selected: ${_tagBloc.state.selectedTags}');
-
-      CacheCreated(
+      debugPrint('isPublic: $isPublic');
+      final cache = Cache(
         title: _titleController.text,
         content: _contentController.text,
-        tags: _tagBloc.state.selectedTags.keys.toList(),
+        isPublic: isPublic,
       );
-
       _cacheBloc.add(
         CacheCreated(
-          title: _titleController.text,
-          content: _contentController.text,
+          cache: cache,
           tags: _tagBloc.state.selectedTags.keys.toList(),
         ),
       );

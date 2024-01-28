@@ -13,6 +13,7 @@ _$CacheImpl _$$CacheImplFromJson(Map<String, dynamic> json) => _$CacheImpl(
       owner: json['owner'] as String?,
       createdAt: _$JsonConverterFromJson<String, DateTime?>(
           json['created_at'], const DateTimeConverter().fromJson),
+      isPublic: json['is_public'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$CacheImplToJson(_$CacheImpl instance) {
@@ -28,6 +29,7 @@ Map<String, dynamic> _$$CacheImplToJson(_$CacheImpl instance) {
   }
 
   writeNotNull('id', instance.id);
+  val['is_public'] = instance.isPublic;
   return val;
 }
 
