@@ -26,7 +26,7 @@ class _SplashPageState extends State<SplashPage> {
         final appUser = SharedPrefs.getUser();
 
         if (token != null && appUser != null) {
-          context.goNamed(CachesListPage.name);
+          context.goNamed(CachesPage.name);
         } else {
           context.goNamed(SignInPage.name);
         }

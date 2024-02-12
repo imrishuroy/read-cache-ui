@@ -62,23 +62,6 @@ class CacheDetailsPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             if (cache?.id != null) CacheTags(cacheId: cache?.id ?? 0),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                const SizedBox(width: 20),
-                const Spacer(),
-                const Text(
-                  'Make it public',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Switch.adaptive(
-                  value: false,
-                  onChanged: (value) {},
-                ),
-              ],
-            ),
           ],
         ),
       ),

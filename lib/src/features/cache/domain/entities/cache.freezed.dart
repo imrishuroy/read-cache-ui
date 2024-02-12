@@ -29,6 +29,8 @@ mixin _$Cache {
   @DateTimeConverter()
   @JsonKey(name: 'created_at', includeToJson: false)
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_public', includeToJson: true)
+  bool get isPublic => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +49,8 @@ abstract class $CacheCopyWith<$Res> {
       @JsonKey(includeToJson: false) String? owner,
       @DateTimeConverter()
       @JsonKey(name: 'created_at', includeToJson: false)
-      DateTime? createdAt});
+      DateTime? createdAt,
+      @JsonKey(name: 'is_public', includeToJson: true) bool isPublic});
 }
 
 /// @nodoc
@@ -68,6 +71,7 @@ class _$CacheCopyWithImpl<$Res, $Val extends Cache>
     Object? id = freezed,
     Object? owner = freezed,
     Object? createdAt = freezed,
+    Object? isPublic = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -90,6 +94,10 @@ class _$CacheCopyWithImpl<$Res, $Val extends Cache>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isPublic: null == isPublic
+          ? _value.isPublic
+          : isPublic // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -108,7 +116,8 @@ abstract class _$$CacheImplCopyWith<$Res> implements $CacheCopyWith<$Res> {
       @JsonKey(includeToJson: false) String? owner,
       @DateTimeConverter()
       @JsonKey(name: 'created_at', includeToJson: false)
-      DateTime? createdAt});
+      DateTime? createdAt,
+      @JsonKey(name: 'is_public', includeToJson: true) bool isPublic});
 }
 
 /// @nodoc
@@ -127,6 +136,7 @@ class __$$CacheImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? owner = freezed,
     Object? createdAt = freezed,
+    Object? isPublic = null,
   }) {
     return _then(_$CacheImpl(
       title: null == title
@@ -149,6 +159,10 @@ class __$$CacheImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isPublic: null == isPublic
+          ? _value.isPublic
+          : isPublic // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -163,7 +177,8 @@ class _$CacheImpl implements _Cache {
       @JsonKey(includeToJson: false) this.owner,
       @DateTimeConverter()
       @JsonKey(name: 'created_at', includeToJson: false)
-      this.createdAt});
+      this.createdAt,
+      @JsonKey(name: 'is_public', includeToJson: true) this.isPublic = false});
 
   factory _$CacheImpl.fromJson(Map<String, dynamic> json) =>
       _$$CacheImplFromJson(json);
@@ -182,10 +197,13 @@ class _$CacheImpl implements _Cache {
   @DateTimeConverter()
   @JsonKey(name: 'created_at', includeToJson: false)
   final DateTime? createdAt;
+  @override
+  @JsonKey(name: 'is_public', includeToJson: true)
+  final bool isPublic;
 
   @override
   String toString() {
-    return 'Cache(title: $title, content: $content, id: $id, owner: $owner, createdAt: $createdAt)';
+    return 'Cache(title: $title, content: $content, id: $id, owner: $owner, createdAt: $createdAt, isPublic: $isPublic)';
   }
 
   @override
@@ -198,13 +216,15 @@ class _$CacheImpl implements _Cache {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.isPublic, isPublic) ||
+                other.isPublic == isPublic));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, title, content, id, owner, createdAt);
+      Object.hash(runtimeType, title, content, id, owner, createdAt, isPublic);
 
   @JsonKey(ignore: true)
   @override
@@ -228,7 +248,9 @@ abstract class _Cache implements Cache {
       @JsonKey(includeToJson: false) final String? owner,
       @DateTimeConverter()
       @JsonKey(name: 'created_at', includeToJson: false)
-      final DateTime? createdAt}) = _$CacheImpl;
+      final DateTime? createdAt,
+      @JsonKey(name: 'is_public', includeToJson: true)
+      final bool isPublic}) = _$CacheImpl;
 
   factory _Cache.fromJson(Map<String, dynamic> json) = _$CacheImpl.fromJson;
 
@@ -246,6 +268,9 @@ abstract class _Cache implements Cache {
   @DateTimeConverter()
   @JsonKey(name: 'created_at', includeToJson: false)
   DateTime? get createdAt;
+  @override
+  @JsonKey(name: 'is_public', includeToJson: true)
+  bool get isPublic;
   @override
   @JsonKey(ignore: true)
   _$$CacheImplCopyWith<_$CacheImpl> get copyWith =>

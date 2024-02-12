@@ -5,7 +5,7 @@ import 'package:read_cache_ui/src/core/config/injection_container.dart';
 import 'package:read_cache_ui/src/core/validators/validators.dart';
 import 'package:read_cache_ui/src/core/widgets/widgets.dart';
 import 'package:read_cache_ui/src/features/auth/presentation/presentation.dart';
-import 'package:read_cache_ui/src/features/cache/presentation/pages/caches_list_page.dart';
+import 'package:read_cache_ui/src/features/cache/presentation/pages/caches_page.dart';
 import 'package:read_cache_ui/src/services/services.dart';
 
 class CreateUserPage extends StatefulWidget {
@@ -43,7 +43,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
         bloc: _authBloc,
         listener: (context, state) {
           if (state.userStatus == UserStatus.authorized) {
-            context.goNamed(CachesListPage.name);
+            context.goNamed(CachesPage.name);
           }
           if (state.authStatus == AuthStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(

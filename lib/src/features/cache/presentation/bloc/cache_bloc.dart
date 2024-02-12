@@ -1,5 +1,6 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
@@ -31,8 +32,10 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
       ),
     );
     on<CacheCreated>(_onCacheCreated);
+    on<UpdateCacheInitialized>(_onUpdateCacheInitialized);
     on<CacheUpdated>(_onCacheUpdated);
     on<CacheDeleted>(_onCacheDeleted);
+    on<CachePublicToggled>(_onCachePublicToggled);
   }
 
   final TagBloc _tagBloc;
@@ -129,11 +132,9 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
         status: CacheStatus.loading,
       ),
     );
+    debugPrint('CacheCreated: ${event.cache.toJson()}');
     final response = await _cacheUseCase.createCache(
-      cache: Cache(
-        title: event.title,
-        content: event.content,
-      ),
+      cache: event.cache,
     );
     response.fold(
       (failure) {
@@ -167,6 +168,17 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     );
   }
 
+  Future<void> _onUpdateCacheInitialized(
+    UpdateCacheInitialized event,
+    Emitter<CacheState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        updateCache: event.cache,
+      ),
+    );
+  }
+
   Future<void> _onCacheUpdated(
     CacheUpdated event,
     Emitter<CacheState> emit,
@@ -180,11 +192,7 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     final cache = event.cache;
 
     final response = await _cacheUseCase.updateCache(
-      cache: Cache(
-        id: cache.id,
-        title: cache.title,
-        content: cache.content,
-      ),
+      cache: cache,
     );
 
     await response.fold((failure) {
@@ -213,16 +221,24 @@ class CacheBloc extends Bloc<CacheEvent, CacheState> {
     });
   }
 
+  Future<void> _onCachePublicToggled(
+    CachePublicToggled event,
+    Emitter<CacheState> emit,
+  ) async {
+    if (state.updateCache?.isPublic == null) return;
+    emit(
+      state.copyWith(
+        updateCache: state.updateCache?.copyWith(
+          isPublic: !state.updateCache!.isPublic,
+        ),
+      ),
+    );
+  }
+
   Future<void> _onCacheDeleted(
     CacheDeleted event,
     Emitter<CacheState> emit,
   ) async {
-    // emit(
-    //   state.copyWith(
-    //     status: CacheStatus.loading,
-    //   ),
-    // );
-
     final response = await _cacheUseCase.deleteCache(
       id: event.id,
     );

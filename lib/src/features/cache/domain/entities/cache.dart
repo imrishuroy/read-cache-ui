@@ -14,6 +14,9 @@ class Cache with _$Cache {
     @DateTimeConverter()
     @JsonKey(name: 'created_at', includeToJson: false)
     DateTime? createdAt,
+    @JsonKey(name: 'is_public', includeToJson: true)
+    @Default(false)
+    bool isPublic,
   }) = _Cache;
 
   factory Cache.fromJson(Map<String, dynamic> json) => _$CacheFromJson(json);
