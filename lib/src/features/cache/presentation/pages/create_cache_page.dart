@@ -30,7 +30,6 @@ class _CreateCachePageState extends State<CreateCachePage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
-
   final _cacheBloc = getIt<CacheBloc>();
   final _tagBloc = getIt<TagBloc>();
 

@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:read_cache_ui/src/core/config/failure.dart';
 import 'package:read_cache_ui/src/features/cache/domain/domain.dart';
 import 'package:read_cache_ui/src/features/public_cache/domain/domain.dart';
+import 'package:read_cache_ui/src/features/tag/domain/domain.dart';
 
 part 'public_cache_event.dart';
 part 'public_cache_state.dart';
@@ -15,6 +16,7 @@ class PublicCacheBloc extends Bloc<PublicCacheEvent, PublicCacheState> {
   })  : _publicCacheUseCase = publicCacheUseCase,
         super(PublicCacheState.initial()) {
     on<PublicCacheLoaded>(_onPublicCacheLoaded);
+    on<TagsSelected>(_onTagsSelected);
   }
   final PublicCacheUseCase _publicCacheUseCase;
 
@@ -25,7 +27,8 @@ class PublicCacheBloc extends Bloc<PublicCacheEvent, PublicCacheState> {
     const pageSize = 10;
     const pageId = 1;
     if (state.status == PublicCacheStatus.initial ||
-        state.status == PublicCacheStatus.loading) {
+        state.status == PublicCacheStatus.loading ||
+        event.pageId != null) {
       emit(
         state.copyWith(
           status: PublicCacheStatus.loading,
@@ -100,5 +103,16 @@ class PublicCacheBloc extends Bloc<PublicCacheEvent, PublicCacheState> {
         },
       );
     }
+  }
+
+  Future<void> _onTagsSelected(
+    TagsSelected event,
+    Emitter<PublicCacheState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        selectedTags: event.selectedTags,
+      ),
+    );
   }
 }

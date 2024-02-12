@@ -10,12 +10,24 @@ abstract class PublicCacheEvent extends Equatable {
 class PublicCacheLoaded extends PublicCacheEvent {
   const PublicCacheLoaded({
     required this.tagIds,
+    this.pageSize,
+    this.pageId,
   });
 
+  final int? pageSize;
+  final int? pageId;
   final List<int> tagIds;
+}
+
+class TagsSelected extends PublicCacheEvent {
+  const TagsSelected({
+    required this.selectedTags,
+  });
+
+  final List<Tag?> selectedTags;
 
   @override
   List<Object> get props => [
-        tagIds,
+        selectedTags,
       ];
 }

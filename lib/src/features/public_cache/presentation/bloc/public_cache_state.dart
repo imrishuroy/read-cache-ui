@@ -25,6 +25,7 @@ class PublicCacheState extends Equatable {
   final List<Cache?> cacheList;
   final int pageId;
   final bool hasReachedMax;
+
   final Failure? failure;
 
   PublicCacheState copyWith({
@@ -32,6 +33,7 @@ class PublicCacheState extends Equatable {
     List<Cache?>? cacheList,
     int? pageId,
     bool? hasReachedMax,
+    List<Tag?>? selectedTags,
     Failure? failure,
   }) {
     return PublicCacheState(
